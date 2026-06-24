@@ -15,12 +15,17 @@ def _write_cache(views: dict):
         (CACHE / f"{name}.json").write_text(json.dumps(data, indent=2, ensure_ascii=False))
 
 def _client():
+    # Defaults target a LOCAL Flexo stack in Docker (openmbee/flexo-mms-deployment):
+    # no token needed — the auth service issues one from user01/password1 via /login.
+    # For the hosted remote, set FLEXO_URL + FLEXO_TOKEN in .env instead.
     from cli.flexo_client import FlexoClient
-    return FlexoClient(os.environ.get("FLEXO_URL", "https://try-layer1.starforge.app"),
+    return FlexoClient(os.environ.get("FLEXO_URL", "http://localhost:8080"),
                        os.environ.get("FLEXO_ORG", "civic"),
                        os.environ.get("FLEXO_REPO", "composting"),
                        token=os.environ.get("FLEXO_TOKEN"),
-                       auth_url=os.environ.get("FLEXO_AUTH_URL"))
+                       auth_url=os.environ.get("FLEXO_AUTH_URL", "http://localhost:8082"),
+                       user=os.environ.get("FLEXO_USER", "user01"),
+                       password=os.environ.get("FLEXO_PASS", "password1"))
 
 @app.command("seed-offline")
 def seed_offline(trig: str = "fixtures/graph-explorer-stub.trig"):
