@@ -15,7 +15,14 @@ uv run ccp serve                                            # backend on :8000
 cd ui && npm install && npm run dev                         # dashboard on :5173
 ```
 
-## Ownership
-- `cli/`, `server/`, `views/queries/`, `ontology/`, `flexo/` — Z (backend, schema, closure)
-- `ui/` — Joshua (dashboard)
-- `fixtures/`, capture template — Christine (content)
+## Team — MVC
+
+We sprint in parallel, each owning one layer. **Read [`CLAUDE.md`](CLAUDE.md) and
+[`docs/BRANCHING.md`](docs/BRANCHING.md) before your first commit.**
+
+- **M — Model — Zargham:** `flexo/`, `ontology/`, `views/schema.json`, `views/queries/`, `cli/` (Flexo deployment + ontology + the frozen view contract)
+- **V — View — Joshua:** `ui/`, `server/` (the graph-explorer dashboard + its backend)
+- **C — Controller — Christine:** `analysis/`, `fixtures/capture-template.md` (the real analysis, coerced into M's ontology, rendered by V)
+
+The seam between layers is the frozen V1–V5 contract in `views/schema.json` and the
+generated `views/cache/*.json`. Bind to shapes, not internals.

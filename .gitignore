@@ -5,3 +5,4 @@ __pycache__/
 ui/dist/
 .DS_Store
 .claude/worktrees/
+.superpowers/
