@@ -4,6 +4,7 @@ runs the same projection as the offline path."""
 from __future__ import annotations
 from pathlib import Path
 from rdflib import Dataset, URIRef, Literal, BNode
+from cli.curie import GRAPH_BRANCHES, GRAPH_IRI_PREFIX
 from cli.trig_to_views import trig_to_views_from_dataset
 
 VIEW_NAMES = ["V1", "V2", "V3", "V4", "V5"]
@@ -41,27 +42,28 @@ def _term(bv):
     return Literal(v)
 
 
-def _fetch_dataset(client, branch):
-    """Fetch all named-graph quads from Flexo and return an rdflib Dataset.
+def _fetch_dataset(client):
+    """Fetch triples from each Flexo branch and return a reconstructed Dataset.
 
-    Uses a single SELECT over all named graphs so the resulting Dataset is
-    structurally equivalent to parsing the source .trig file — enabling the
-    shared trig_to_views_from_dataset() projection to run unchanged.
+    Follows the ADCS-lifecycle-demo pattern: each named graph lives in its own
+    Flexo branch (branch name = last IRI segment of the graph IRI). Query each
+    branch with a flat SELECT and add triples under the correct named graph IRI
+    so the Dataset is structurally equivalent to parsing the source .trig file.
     """
-    sparql = "SELECT ?g ?s ?p ?o WHERE { GRAPH ?g { ?s ?p ?o } }"
-    rows = client.query(branch, sparql)["results"]["bindings"]
     ds = Dataset()
-    for row in rows:
-        ds.add((_term(row["s"]), URIRef(row["p"]["value"]), _term(row["o"]),
-                URIRef(row["g"]["value"])))
+    for branch in GRAPH_BRANCHES:
+        rows = client.query(branch, "SELECT ?s ?p ?o WHERE { ?s ?p ?o }")["results"]["bindings"]
+        graph_iri = URIRef(GRAPH_IRI_PREFIX + branch)
+        for row in rows:
+            ds.add((_term(row["s"]), URIRef(row["p"]["value"]), _term(row["o"]), graph_iri))
     return ds
 
 
-def materialize(client, branch):
+def materialize(client, branch=None):
     """Fetch the quadstore from Flexo and project it into the V1–V5 view dict.
 
-    Delegates to trig_to_views_from_dataset() — the same function used by the
-    offline `ccp seed-offline` path — so offline and live caches are guaranteed
-    to be byte-for-shape identical.
+    Queries each named-graph branch separately (ADCS pattern) and delegates to
+    trig_to_views_from_dataset() — the same function used by `ccp seed-offline`.
+    The `branch` parameter is unused; kept for call-site compatibility.
     """
-    return trig_to_views_from_dataset(_fetch_dataset(client, branch))
+    return trig_to_views_from_dataset(_fetch_dataset(client))

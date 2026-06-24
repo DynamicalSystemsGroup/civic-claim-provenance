@@ -1,5 +1,10 @@
-"""Shared CURIE prefix table and URI → CURIE shortener used by all projection paths."""
+"""Shared CURIE prefix table, URI → CURIE shortener, and graph/branch constants."""
 from __future__ import annotations
+
+# Named graph IRIs → Flexo branch names (last IRI segment, per ADCS convention).
+# One branch per named graph; branch identity replaces the GRAPH clause.
+GRAPH_IRI_PREFIX = "urn:nyccompost:graph:"
+GRAPH_BRANCHES = ["judgments", "evidence", "provenance", "attestation"]
 
 PREFIXES = {
     "urn:nyccompost:claim:": "cl:",

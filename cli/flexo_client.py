@@ -33,6 +33,18 @@ class FlexoClient:
         self.token = r.json()["token"]
         return self.token
 
+    def ensure_branch(self, branch: str, base: str = "master") -> None:
+        """Create branch if absent (idempotent). Mirrors ADCS _ensure_branch pattern."""
+        url = f"{self.base}/orgs/{self.org}/repos/{self.repo}/branches/{branch}"
+        r = httpx.head(url, headers=self._headers(), timeout=30)
+        if r.status_code in (200, 204):
+            return
+        body = (
+            f'<> <http://purl.org/dc/terms/title> "{branch}"@en ;\n'
+            f'   <https://mms.openmbee.org/rdf/ontology/ref> <./{base}> .'
+        )
+        self.put_turtle(url, body)
+
     def put_turtle(self, url, body) -> int:
         r = httpx.put(url, headers=self._headers("text/turtle"), content=body, timeout=self.timeout)
         return r.status_code  # caller treats 2xx or 409 (exists) as OK
