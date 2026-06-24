@@ -3,6 +3,7 @@ from __future__ import annotations
 import json, os
 from pathlib import Path
 import typer
+from cli.curie import GRAPH_BRANCHES
 from cli.trig_to_views import trig_to_views
 
 app = typer.Typer(help="Civic Claim Provenance pipeline")
@@ -52,6 +53,9 @@ def load(trig: str, base: str = "master"):
         if "x-rdflib" in g:
             continue  # skip rdflib internal default graph
         branch = g.rstrip("/:").rsplit(":", 1)[-1]  # e.g. "judgments"
+        if branch not in GRAPH_BRANCHES:
+            typer.echo(f"  skip unknown graph {g!r} (not in GRAPH_BRANCHES)", err=True)
+            continue
         c.ensure_branch(branch, base=base)
         c.update(branch, "INSERT DATA {\n" + nt + "\n}")
         typer.echo(f"  {branch}: {len(nt.splitlines())} triples")
