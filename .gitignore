@@ -4,3 +4,4 @@ __pycache__/
 .env
 ui/dist/
 .DS_Store
+.claude/worktrees/
