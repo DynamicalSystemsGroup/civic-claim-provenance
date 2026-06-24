@@ -1,14 +1,12 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Graph } from "./graph/Graph";
 import { Inspector } from "./inspector/Inspector";
 import { Filters } from "./filters/Filters";
-import { fetchView, type NodeRow } from "./data/views";
+import { fetchView } from "./data/views";
 
 export default function App() {
   const [selected, setSelected] = useState<string | null>(null);
   const [hidden, setHidden] = useState<Set<string> | undefined>(undefined);
-
-  useEffect(() => { fetchView<NodeRow[]>("V1").catch(console.error); }, []);
 
   const judgmentsOnly = async (on: boolean) => {
     if (!on) return setHidden(undefined);

@@ -37,7 +37,13 @@ def rests_on(edges):
 
 def materialize(client, branch):
     """Run SPARQL views against Flexo, assemble V1–V5 dict. V3 from node props is
-    layered in by cli.trig_to_views for offline; for Flexo we query node props per id."""
+    layered in by cli.trig_to_views for offline; for Flexo we query node props per id.
+
+    KNOWN GAP (Flexo path only, not the demo path): the V*.rq queries return full
+    URIs via STR(?node), whereas the offline builder emits CURIEs (cl:/ev:/...).
+    Before `ccp refresh` is used as the cache source, normalize these ids to CURIEs
+    here so V1/V2/V5 ids join consistently. The demo reads the offline-seeded cache,
+    so this does not affect tonight."""
     result = {}
     for name in ("V1", "V2", "V5"):
         sparql = (QUERY_DIR / f"{name}.rq").read_text()

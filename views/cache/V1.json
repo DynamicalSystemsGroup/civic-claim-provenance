@@ -2,37 +2,37 @@
   {
     "id": "cl:demo-variation",
     "type": "claim",
-    "label": "cl:demo-variation",
+    "label": "Residential-organics tonnage per capita varies across districts",
     "verdict": "passed"
   },
   {
     "id": "am:demo-denominator",
     "type": "assumption",
-    "label": "am:demo-denominator",
+    "label": "Per-capita denominator choice",
     "verdict": "cantTell"
   },
   {
     "id": "jd:demo-supported",
     "type": "judgment",
-    "label": "jd:demo-supported",
+    "label": "Variation is describable from the data",
     "verdict": "passed"
   },
   {
     "id": "jd:demo-denominator",
     "type": "judgment",
-    "label": "jd:demo-denominator",
+    "label": "Denominator is a deferred human judgment",
     "verdict": "cantTell"
   },
   {
     "id": "ev:demo-tonnage",
     "type": "evidence",
-    "label": "ev:demo-tonnage",
+    "label": "Per-district residential-organics tonnage, CY2025",
     "verdict": "—"
   },
   {
     "id": "at:demo-signoff",
     "type": "attestation",
-    "label": "at:demo-signoff",
+    "label": "Sign-off over the variation finding",
     "verdict": "—"
   }
 ]

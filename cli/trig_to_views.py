@@ -31,8 +31,10 @@ def _curie(uri):
     return s
 
 def _prop(ds, node, name):
-    v = ds.value(node, URIRef(P + name))
-    return str(v) if v is not None else None
+    # ds.value() only reads the default graph; the data lives in named graphs,
+    # so query across all graphs via quads().
+    q = list(ds.quads((node, URIRef(P + name), None, None)))
+    return str(q[0][2]) if q else None
 
 def trig_to_views(trig_path):
     ds = Dataset()
@@ -53,7 +55,8 @@ def trig_to_views(trig_path):
     for node, ntype in typed.items():
         verdict = own_verdict.get(node) or gov_verdict.get(node) or "—"
         nid = _curie(node)
-        label = ds.value(node, RDFS.label)
+        lq = list(ds.quads((node, RDFS.label, None, None)))
+        label = lq[0][2] if lq else None
         nodes.append({"id": nid, "type": ntype, "label": str(label) if label else nid, "verdict": verdict})
         det = {"type": ntype}
         for src, dst in DETAIL_PROPS.get(ntype, []):
