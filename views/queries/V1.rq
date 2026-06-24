@@ -1,0 +1,11 @@
+PREFIX p: <urn:nyccompost:prop:>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX earl: <http://www.w3.org/ns/earl#>
+SELECT ?id ?type ?label ?verdict WHERE {
+  ?node p:nodeType ?type ; rdfs:label ?label .
+  BIND(STR(?node) AS ?id)
+  OPTIONAL { ?gov p:judges ?node ; earl:outcome ?o .
+             BIND(REPLACE(STR(?o), "^.*[#/]", "") AS ?govVerdict) }
+  OPTIONAL { ?node earl:outcome ?own . BIND(REPLACE(STR(?own), "^.*[#/]", "") AS ?ownVerdict) }
+  BIND(COALESCE(?ownVerdict, ?govVerdict, "—") AS ?verdict)
+}

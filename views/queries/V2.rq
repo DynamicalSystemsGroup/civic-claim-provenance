@@ -1,0 +1,7 @@
+PREFIX p: <urn:nyccompost:prop:>
+SELECT ?src_id ?dst_id ?rel WHERE {
+  VALUES ?rel { "supports" "judges" "dependsOn" "assumes" "attestsOver" }
+  ?s ?pred ?o .
+  BIND(STR(?s) AS ?src_id) BIND(STR(?o) AS ?dst_id)
+  FILTER(?pred = IRI(CONCAT("urn:nyccompost:prop:", ?rel)))
+}

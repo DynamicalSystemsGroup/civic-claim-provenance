@@ -1,0 +1,93 @@
+# graph-explorer-stub.trig
+# SYNTHETIC — illustrative only, NOT real findings.
+#
+# Purpose: exercise all five canonical node types (claim, evidence, assumption,
+# judgment, attestation) and every edge relation (supports, judges, dependsOn,
+# assumes, attestsOver) so the graph-explorer dashboard (interface contract
+# V1-V5) can be built against day-one data. The thin verification fixture
+# (evidence_supply_chain.trig) contains only evidence + judgment + dependsOn;
+# this stub fills the rest so Joshua isn't blocked. Conforms to the canonical
+# schema in ontology-and-doctrine.md. Node type is the explicit p:nodeType
+# property (not the id prefix). Source authority and attestation auspice are
+# attributes here (org-as-node is an ontology next step).
+
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+@prefix earl: <http://www.w3.org/ns/earl#> .
+@prefix dct:  <http://purl.org/dc/terms/> .
+@prefix p:    <urn:nyccompost:prop:> .
+@prefix cl:   <urn:nyccompost:claim:> .
+@prefix ev:   <urn:nyccompost:evidence:> .
+@prefix am:   <urn:nyccompost:assumption:> .
+@prefix jd:   <urn:nyccompost:judgment:> .
+@prefix at:   <urn:nyccompost:attestation:> .
+@prefix g:    <urn:nyccompost:graph:> .
+
+# --- argument layer: claims, assumptions, judgments ------------------------
+g:judgments {
+  cl:demo-variation
+    p:nodeType "claim" ;
+    rdfs:label "Residential-organics tonnage per capita varies across districts" ;
+    p:statement "Per-district CY2025 residential-organics tonnage per capita is not uniform." ;
+    p:assumes am:demo-denominator .
+
+  am:demo-denominator
+    p:nodeType "assumption" ;
+    rdfs:label "Per-capita denominator choice" ;
+    p:statement "Denominator = 2010 CD-native population (placeholder; stale)." .
+
+  jd:demo-supported
+    p:nodeType "judgment" ;
+    rdfs:label "Variation is describable from the data" ;
+    p:decision "Is per-district CY2025 tonnage describable?" ;
+    p:chosen "supported" ;
+    earl:outcome earl:passed ;
+    p:rationale "Complete series, 708 = 59x12, zero missing (synthetic mirror)." ;
+    p:attributer "A. Analyst" ;
+    p:pinnedAsOf "2026-06-01" ;
+    p:judges cl:demo-variation ;
+    p:dependsOn ev:demo-tonnage .
+
+  jd:demo-denominator
+    p:nodeType "judgment" ;
+    rdfs:label "Denominator is a deferred human judgment" ;
+    p:decision "Which population denominator?" ;
+    p:chosen "deferred - needs human judgment" ;
+    earl:outcome earl:cantTell ;
+    p:rationale "Currency vs CD-native cleanliness; normative, data cannot pick." ;
+    p:attributer "A. Analyst" ;
+    p:judges am:demo-denominator ;
+    p:dependsOn am:demo-denominator .
+}
+
+# --- evidence layer ---------------------------------------------------------
+g:evidence {
+  ev:demo-tonnage
+    p:nodeType "evidence" ;
+    rdfs:label "Per-district residential-organics tonnage, CY2025" ;
+    p:finding "Synthetic per-district tonnage series." ;
+    p:queryUrl "https://example.invalid/synthetic-query" ;
+    p:sourceId "ebb7-mvp5" ;
+    p:sourceVersion "2026-06-01" ;
+    p:payloadSha256 "0000000000000000000000000000000000000000000000000000000000000000" ;
+    p:supports cl:demo-variation .
+}
+
+# --- provenance layer: the source pin --------------------------------------
+g:provenance {
+  ev:demo-tonnage
+    prov:wasDerivedFrom "ds:ebb7-mvp5@2026-06-01" ;
+    prov:generatedAtTime "2026-06-24T19:10:00Z" ;
+    dct:source "NYC Open Data - DSNY Monthly Tonnage (ebb7-mvp5)" .
+}
+
+# --- attestation layer: the signed human conclusion ------------------------
+g:attestation {
+  at:demo-signoff
+    p:nodeType "attestation" ;
+    rdfs:label "Sign-off over the variation finding" ;
+    p:attester "Jane Official" ;                 # human name (required)
+    p:orgAuspice "NYC DSNY (synthetic)" ;        # org auspice as ATTRIBUTE; org-node = ontology next step
+    p:signedAt "2026-06-24T20:00:00Z" ;
+    p:attestsOver cl:demo-variation .
+}

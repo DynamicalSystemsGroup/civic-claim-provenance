@@ -1,0 +1,15 @@
+{
+  "ev:demo-tonnage": [
+    "cl:demo-variation"
+  ],
+  "jd:demo-supported": [
+    "ev:demo-tonnage",
+    "cl:demo-variation"
+  ],
+  "jd:demo-denominator": [
+    "am:demo-denominator"
+  ],
+  "at:demo-signoff": [
+    "cl:demo-variation"
+  ]
+}

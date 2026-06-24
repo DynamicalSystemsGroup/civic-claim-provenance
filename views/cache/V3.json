@@ -1,0 +1,47 @@
+{
+  "cl:demo-variation": {
+    "type": "claim",
+    "statement": "Per-district CY2025 residential-organics tonnage per capita is not uniform.",
+    "status": "passed"
+  },
+  "am:demo-denominator": {
+    "type": "assumption",
+    "statement": "Denominator = 2010 CD-native population (placeholder; stale)."
+  },
+  "jd:demo-supported": {
+    "type": "judgment",
+    "judges": "cl:demo-variation",
+    "decision": "Is per-district CY2025 tonnage describable?",
+    "chosen": "supported",
+    "grounding": "Complete series, 708 = 59x12, zero missing (synthetic mirror).",
+    "attributer": "A. Analyst",
+    "rationale": "Complete series, 708 = 59x12, zero missing (synthetic mirror).",
+    "pinned_as_of": "2026-06-01",
+    "earl_outcome": "passed"
+  },
+  "jd:demo-denominator": {
+    "type": "judgment",
+    "judges": "am:demo-denominator",
+    "decision": "Which population denominator?",
+    "chosen": "deferred - needs human judgment",
+    "grounding": "Currency vs CD-native cleanliness; normative, data cannot pick.",
+    "attributer": "A. Analyst",
+    "rationale": "Currency vs CD-native cleanliness; normative, data cannot pick.",
+    "earl_outcome": "cantTell"
+  },
+  "ev:demo-tonnage": {
+    "type": "evidence",
+    "source_id": "ebb7-mvp5",
+    "source_version": "2026-06-01",
+    "query_url": "https://example.invalid/synthetic-query",
+    "finding": "Synthetic per-district tonnage series.",
+    "payload_sha256": "0000000000000000000000000000000000000000000000000000000000000000"
+  },
+  "at:demo-signoff": {
+    "type": "attestation",
+    "attester": "Jane Official",
+    "org_auspice": "NYC DSNY (synthetic)",
+    "signed_at": "2026-06-24T20:00:00Z",
+    "attests_over": "cl:demo-variation"
+  }
+}
