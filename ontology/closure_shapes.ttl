@@ -1,0 +1,6 @@
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix p:  <urn:nyccompost:prop:> .
+[] a sh:NodeShape ;
+   sh:targetSubjectsOf p:chosen ;     # every node that made a choice (a judgment)
+   sh:property [ sh:path p:rationale ; sh:minCount 1 ;
+                 sh:message "judgment lacks a rationale (WP-1b closure)" ] .
