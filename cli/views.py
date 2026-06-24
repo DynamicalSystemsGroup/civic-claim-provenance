@@ -1,12 +1,18 @@
-"""Map SPARQL JSON bindings to the frozen view shapes (views/schema.json)."""
+"""Map SPARQL JSON bindings to the frozen view shapes (views/schema.json).
+Also provides the live-path materialize() that fetches quads from Flexo and
+runs the same projection as the offline path."""
 from __future__ import annotations
 from pathlib import Path
+from rdflib import Dataset, URIRef, Literal, BNode
+from cli.trig_to_views import trig_to_views_from_dataset
 
 VIEW_NAMES = ["V1", "V2", "V3", "V4", "V5"]
 QUERY_DIR = Path(__file__).resolve().parent.parent / "views" / "queries"
 
+
 def _val(binding, key, default=None):
     return binding[key]["value"] if key in binding else default
+
 
 def shape_bindings(name, bindings):
     if name == "V1":
@@ -18,36 +24,44 @@ def shape_bindings(name, bindings):
         return [_val(b, "id") for b in bindings]
     raise ValueError(f"{name} is assembled in Python, not from raw bindings")
 
-def rests_on(edges):
-    """V4: transitive closure of judges/dependsOn/supports per source node."""
-    adj = {}
-    for e in edges:
-        if e["rel"] in ("judges", "dependsOn", "supports", "attestsOver"):
-            adj.setdefault(e["src_id"], []).append(e["dst_id"])
-    out = {}
-    for start in adj:
-        seen, stack = [], list(adj.get(start, []))
-        while stack:
-            n = stack.pop()
-            if n not in seen:
-                seen.append(n)
-                stack.extend(adj.get(n, []))
-        out[start] = seen
-    return out
+
+def _term(bv):
+    """Convert a SPARQL JSON binding value dict to an rdflib term."""
+    t, v = bv["type"], bv["value"]
+    if t == "uri":
+        return URIRef(v)
+    if t == "bnode":
+        return BNode(v)
+    dt = bv.get("datatype")
+    lang = bv.get("xml:lang")
+    if lang:
+        return Literal(v, lang=lang)
+    if dt:
+        return Literal(v, datatype=URIRef(dt))
+    return Literal(v)
+
+
+def _fetch_dataset(client, branch):
+    """Fetch all named-graph quads from Flexo and return an rdflib Dataset.
+
+    Uses a single SELECT over all named graphs so the resulting Dataset is
+    structurally equivalent to parsing the source .trig file — enabling the
+    shared trig_to_views_from_dataset() projection to run unchanged.
+    """
+    sparql = "SELECT ?g ?s ?p ?o WHERE { GRAPH ?g { ?s ?p ?o } }"
+    rows = client.query(branch, sparql)["results"]["bindings"]
+    ds = Dataset()
+    for row in rows:
+        ds.add((_term(row["s"]), URIRef(row["p"]["value"]), _term(row["o"]),
+                URIRef(row["g"]["value"])))
+    return ds
+
 
 def materialize(client, branch):
-    """Run SPARQL views against Flexo, assemble V1–V5 dict. V3 from node props is
-    layered in by cli.trig_to_views for offline; for Flexo we query node props per id.
+    """Fetch the quadstore from Flexo and project it into the V1–V5 view dict.
 
-    KNOWN GAP (Flexo path only, not the demo path): the V*.rq queries return full
-    URIs via STR(?node), whereas the offline builder emits CURIEs (cl:/ev:/...).
-    Before `ccp refresh` is used as the cache source, normalize these ids to CURIEs
-    here so V1/V2/V5 ids join consistently. The demo reads the offline-seeded cache,
-    so this does not affect tonight."""
-    result = {}
-    for name in ("V1", "V2", "V5"):
-        sparql = (QUERY_DIR / f"{name}.rq").read_text()
-        result[name] = shape_bindings(name, client.query(branch, sparql)["results"]["bindings"])
-    result["V4"] = rests_on(result["V2"])
-    result["V3"] = {}  # populated by a node-detail pass (out of smoke-test scope tonight)
-    return result
+    Delegates to trig_to_views_from_dataset() — the same function used by the
+    offline `ccp seed-offline` path — so offline and live caches are guaranteed
+    to be byte-for-shape identical.
+    """
+    return trig_to_views_from_dataset(_fetch_dataset(client, branch))
