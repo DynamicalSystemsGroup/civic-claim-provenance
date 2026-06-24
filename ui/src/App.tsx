@@ -1,7 +1,4 @@
-import { useEffect, useState } from "react";
-import { fetchView, NodeRow } from "./data/views";
+import { Graph } from "./graph/Graph";
 export default function App() {
-  const [nodes, setNodes] = useState<NodeRow[]>([]);
-  useEffect(() => { fetchView<NodeRow[]>("V1").then(setNodes).catch(console.error); }, []);
-  return <pre>{nodes.length} nodes loaded</pre>;
+  return <div style={{ height: "100vh" }}><Graph onSelect={(id) => console.log(id)} /></div>;
 }
