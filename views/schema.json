@@ -1,0 +1,20 @@
+{
+  "version": "0.1",
+  "frozen": "interface-contracts.md A4",
+  "node_types": ["claim", "evidence", "assumption", "judgment", "attestation"],
+  "edge_rels": ["supports", "judges", "dependsOn", "assumes", "attestsOver"],
+  "verdicts": ["passed", "failed", "cantTell", "—"],
+  "views": {
+    "V1": {"file": "cache/V1.json", "shape": "array", "columns": ["id", "type", "label", "verdict"]},
+    "V2": {"file": "cache/V2.json", "shape": "array", "columns": ["src_id", "dst_id", "rel"]},
+    "V3": {"file": "cache/V3.json", "shape": "map_by_id", "by_type": {
+      "claim": ["statement", "status"],
+      "evidence": ["source_id", "source_version", "query_url", "finding", "retrieved_at", "payload_sha256"],
+      "assumption": ["statement"],
+      "judgment": ["judges", "decision", "chosen", "grounding", "attributer", "rationale", "earl_outcome", "pinned_as_of"],
+      "attestation": ["attester", "org_auspice", "signed_at", "attests_over"]
+    }},
+    "V4": {"file": "cache/V4.json", "shape": "map_by_id", "value": "array_of_id", "stretch": true},
+    "V5": {"file": "cache/V5.json", "shape": "array_of_id"}
+  }
+}
