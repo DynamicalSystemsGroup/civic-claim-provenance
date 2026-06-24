@@ -1,9 +1,37 @@
 [
-  {"src_id": "ev:demo-tonnage", "dst_id": "cl:demo-variation", "rel": "supports"},
-  {"src_id": "jd:demo-supported", "dst_id": "cl:demo-variation", "rel": "judges"},
-  {"src_id": "jd:demo-supported", "dst_id": "ev:demo-tonnage", "rel": "dependsOn"},
-  {"src_id": "jd:demo-denominator", "dst_id": "am:demo-denominator", "rel": "judges"},
-  {"src_id": "jd:demo-denominator", "dst_id": "am:demo-denominator", "rel": "dependsOn"},
-  {"src_id": "cl:demo-variation", "dst_id": "am:demo-denominator", "rel": "assumes"},
-  {"src_id": "at:demo-signoff", "dst_id": "cl:demo-variation", "rel": "attestsOver"}
+  {
+    "src_id": "ev:demo-tonnage",
+    "dst_id": "cl:demo-variation",
+    "rel": "supports"
+  },
+  {
+    "src_id": "jd:demo-supported",
+    "dst_id": "cl:demo-variation",
+    "rel": "judges"
+  },
+  {
+    "src_id": "jd:demo-denominator",
+    "dst_id": "am:demo-denominator",
+    "rel": "judges"
+  },
+  {
+    "src_id": "jd:demo-supported",
+    "dst_id": "ev:demo-tonnage",
+    "rel": "dependsOn"
+  },
+  {
+    "src_id": "jd:demo-denominator",
+    "dst_id": "am:demo-denominator",
+    "rel": "dependsOn"
+  },
+  {
+    "src_id": "cl:demo-variation",
+    "dst_id": "am:demo-denominator",
+    "rel": "assumes"
+  },
+  {
+    "src_id": "at:demo-signoff",
+    "dst_id": "cl:demo-variation",
+    "rel": "attestsOver"
+  }
 ]

@@ -1,0 +1,2 @@
+# V3 node_detail and V4 rests_on are assembled in cli/views.py
+# (V3 from per-node properties; V4 from transitive closure of V2). Not direct SELECTs.

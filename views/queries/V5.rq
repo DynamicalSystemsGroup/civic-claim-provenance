@@ -1,0 +1,2 @@
+PREFIX p: <urn:nyccompost:prop:>
+SELECT ?id WHERE { ?n p:nodeType ?t . FILTER(?t IN ("assumption","judgment")) BIND(STR(?n) AS ?id) }
