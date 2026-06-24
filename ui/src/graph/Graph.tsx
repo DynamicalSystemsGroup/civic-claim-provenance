@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
 import cytoscape from "cytoscape";
-import { fetchView, NodeRow, EdgeRow } from "../data/views";
+import { fetchView, type NodeRow, type EdgeRow } from "../data/views";
 import { TYPE_COLOR, VERDICT_OPACITY } from "./style";
 
 export function Graph({ onSelect, hidden }: { onSelect: (id: string) => void; hidden?: Set<string> }) {
@@ -35,7 +35,7 @@ export function Graph({ onSelect, hidden }: { onSelect: (id: string) => void; hi
   }, [onSelect]);
   useEffect(() => {
     const cy = cyRef.current; if (!cy) return;
-    cy.nodes().forEach((n) => n.toggleClass("hidden", !!hidden && !hidden.has(n.id())));
+    cy.nodes().forEach((n) => { n.toggleClass("hidden", !!hidden && !hidden.has(n.id())); });
   }, [hidden]);
   return <div ref={box} style={{ width: "100%", height: "100%" }} />;
 }
