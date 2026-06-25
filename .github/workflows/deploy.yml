@@ -1,0 +1,41 @@
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: astral-sh/setup-uv@v5
+
+      - name: Install dependencies
+        run: uv sync --all-groups
+
+      - name: Generate cache from real fixture
+        run: uv run ccp seed-offline --trig fixtures/nyc-composting-real.trig
+
+      - name: Export notebook to HTML
+        run: |
+          mkdir -p _site
+          uv run marimo export html notebooks/dashboard.py \
+            -o _site/index.html --include-code
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+      - id: deployment
+        uses: actions/deploy-pages@v4

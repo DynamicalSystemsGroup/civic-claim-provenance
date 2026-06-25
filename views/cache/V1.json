@@ -1,38 +1,62 @@
 [
   {
-    "id": "cl:demo-variation",
+    "id": "cl:composting-rate-describable",
     "type": "claim",
-    "label": "Residential-organics tonnage per capita varies across districts",
-    "verdict": "passed"
+    "label": "Per-district residential-organics composting rate is describable from DSNY data",
+    "verdict": "cantTell"
   },
   {
-    "id": "am:demo-denominator",
+    "id": "am:compostable-fraction",
     "type": "assumption",
-    "label": "Per-capita denominator choice",
-    "verdict": "cantTell"
-  },
-  {
-    "id": "jd:demo-supported",
-    "type": "judgment",
-    "label": "Variation is describable from the data",
+    "label": "Compostable fraction = 35.8% of total collected (2023 Waste Characterization Study)",
     "verdict": "passed"
   },
   {
-    "id": "jd:demo-denominator",
-    "type": "judgment",
-    "label": "Denominator is a deferred human judgment",
-    "verdict": "cantTell"
-  },
-  {
-    "id": "ev:demo-tonnage",
-    "type": "evidence",
-    "label": "Per-district residential-organics tonnage, CY2025",
+    "id": "am:yard-waste-included",
+    "type": "assumption",
+    "label": "Yard waste and xmas trees included in organics numerator",
     "verdict": "—"
   },
   {
-    "id": "at:demo-signoff",
+    "id": "jd:data-sufficient",
+    "type": "judgment",
+    "label": "DSNY Monthly Tonnage (ebb7-mvp5) is sufficient to describe per-district composting rates",
+    "verdict": "passed"
+  },
+  {
+    "id": "jd:fraction-appropriate",
+    "type": "judgment",
+    "label": "35.8% compostable fraction is appropriate as stated assumption",
+    "verdict": "passed"
+  },
+  {
+    "id": "jd:mandate-effect-describable",
+    "type": "judgment",
+    "label": "Post-mandate rate increase is visible in the data — describing claim only",
+    "verdict": "passed"
+  },
+  {
+    "id": "jd:attribution-cantTell",
+    "type": "judgment",
+    "label": "Causal attribution of rate increase to mandate — cannot tell",
+    "verdict": "cantTell"
+  },
+  {
+    "id": "ev:dsny-tonnage",
+    "type": "evidence",
+    "label": "DSNY Monthly Tonnage — per-district residential organics, CY2021–present",
+    "verdict": "—"
+  },
+  {
+    "id": "ev:waste-char-2023",
+    "type": "evidence",
+    "label": "DSNY 2023 Waste Characterization Study — citywide compostable fraction",
+    "verdict": "—"
+  },
+  {
+    "id": "at:christine-signoff",
     "type": "attestation",
-    "label": "Sign-off over the variation finding",
+    "label": "Christine Rodríguez sign-off on composting rate analysis",
     "verdict": "—"
   }
 ]
