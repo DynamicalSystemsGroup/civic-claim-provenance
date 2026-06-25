@@ -33,6 +33,28 @@ class FlexoClient:
         self.token = r.json()["token"]
         return self.token
 
+    _SAFE_ID = __import__("re").compile(r"^[A-Za-z0-9_-]+$")
+
+    def ensure_branch(self, branch: str, base: str = "master") -> None:
+        """Create branch if absent (idempotent). Mirrors ADCS _ensure_branch pattern.
+
+        branch and base are validated against a strict allowlist regex before
+        being interpolated into URL paths or Turtle literals.
+        """
+        if not self._SAFE_ID.match(branch):
+            raise ValueError(f"Invalid branch name {branch!r} — must match [A-Za-z0-9_-]+")
+        if not self._SAFE_ID.match(base):
+            raise ValueError(f"Invalid base branch {base!r} — must match [A-Za-z0-9_-]+")
+        url = f"{self.base}/orgs/{self.org}/repos/{self.repo}/branches/{branch}"
+        r = httpx.head(url, headers=self._headers(), timeout=30)
+        if r.status_code in (200, 204):
+            return
+        body = (
+            f'<> <http://purl.org/dc/terms/title> "{branch}"@en ;\n'
+            f'   <https://mms.openmbee.org/rdf/ontology/ref> <./{base}> .'
+        )
+        self.put_turtle(url, body)
+
     def put_turtle(self, url, body) -> int:
         r = httpx.put(url, headers=self._headers("text/turtle"), content=body, timeout=self.timeout)
         return r.status_code  # caller treats 2xx or 409 (exists) as OK

@@ -3,6 +3,7 @@ from __future__ import annotations
 import json, os
 from pathlib import Path
 import typer
+from cli.curie import GRAPH_BRANCHES
 from cli.trig_to_views import trig_to_views
 
 app = typer.Typer(help="Civic Claim Provenance pipeline")
@@ -34,19 +35,31 @@ def seed_offline(trig: str = "fixtures/graph-explorer-stub.trig"):
     typer.echo(f"cache written from {trig}")
 
 @app.command()
-def load(trig: str, branch: str = os.environ.get("FLEXO_BRANCH", "main")):
-    """Load a .trig into Flexo (named graphs preserved on one branch)."""
+def load(trig: str, base: str = "master"):
+    """Load a .trig into Flexo (one branch per named graph, flat INSERT DATA).
+
+    Follows the ADCS-lifecycle-demo pattern: each named graph IRI maps to a
+    Flexo branch (last IRI segment), triples are loaded without a GRAPH clause
+    because Flexo's /update endpoint rejects quads (QuadsNotAllowedException).
+    """
     from rdflib import Dataset
     c = _client(); c.login()
     ds = Dataset(); ds.parse(trig, format="trig")
-    for ctx in ds.contexts():
+    for ctx in ds.graphs():
         nt = ctx.serialize(format="nt").strip()
         if not nt:
             continue
-        gname = str(ctx.identifier)
-        body = f"INSERT DATA {{ GRAPH <{gname}> {{\n{nt}\n}} }}"
-        c.update(branch, body)
-    typer.echo(f"loaded {trig} into {branch}")
+        g = str(ctx.identifier)
+        if "x-rdflib" in g:
+            continue  # skip rdflib internal default graph
+        branch = g.rstrip("/:").rsplit(":", 1)[-1]  # e.g. "judgments"
+        if branch not in GRAPH_BRANCHES:
+            typer.echo(f"  skip unknown graph {g!r} (not in GRAPH_BRANCHES)", err=True)
+            continue
+        c.ensure_branch(branch, base=base)
+        c.update(branch, "INSERT DATA {\n" + nt + "\n}")
+        typer.echo(f"  {branch}: {len(nt.splitlines())} triples")
+    typer.echo(f"loaded {trig} into Flexo")
 
 @app.command()
 def refresh(branch: str = os.environ.get("FLEXO_BRANCH", "main")):

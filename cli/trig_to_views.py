@@ -2,14 +2,9 @@
 to the Flexo-materialized cache (views/schema.json)."""
 from __future__ import annotations
 from rdflib import Dataset, RDFS, URIRef
-from cli.views import rests_on
+from cli.curie import _curie
 
 P = "urn:nyccompost:prop:"
-PREFIXES = {
-    "urn:nyccompost:claim:": "cl:", "urn:nyccompost:evidence:": "ev:",
-    "urn:nyccompost:assumption:": "am:", "urn:nyccompost:judgment:": "jd:",
-    "urn:nyccompost:attestation:": "at:",
-}
 EDGE_RELS = ["supports", "judges", "dependsOn", "assumes", "attestsOver"]
 DETAIL_PROPS = {
     "claim": [("statement", "statement"), ("status", "_status")],
@@ -23,12 +18,24 @@ DETAIL_PROPS = {
                     ("signedAt", "signed_at"), ("attestsOver", "attests_over")],
 }
 
-def _curie(uri):
-    s = str(uri)
-    for full, short in PREFIXES.items():
-        if s.startswith(full):
-            return short + s[len(full):]
-    return s
+
+def rests_on(edges):
+    """V4: transitive closure of judges/dependsOn/supports per source node."""
+    adj = {}
+    for e in edges:
+        if e["rel"] in ("judges", "dependsOn", "supports", "attestsOver"):
+            adj.setdefault(e["src_id"], []).append(e["dst_id"])
+    out = {}
+    for start in adj:
+        seen, stack = [], list(adj.get(start, []))
+        while stack:
+            n = stack.pop()
+            if n not in seen:
+                seen.append(n)
+                stack.extend(adj.get(n, []))
+        out[start] = seen
+    return out
+
 
 def _prop(ds, node, name):
     # ds.value() only reads the default graph; the data lives in named graphs,
@@ -36,18 +43,20 @@ def _prop(ds, node, name):
     q = list(ds.quads((node, URIRef(P + name), None, None)))
     return str(q[0][2]) if q else None
 
-def trig_to_views(trig_path):
-    ds = Dataset()
-    ds.parse(trig_path, format="trig")
+
+def trig_to_views_from_dataset(ds):
+    """Project an rdflib Dataset into the V1–V5 view dict.
+
+    Shared by the offline path (Dataset parsed from a .trig file) and the live
+    path (Dataset reconstructed from Flexo quads). One code path = guaranteed
+    shape parity between `ccp seed-offline` and `ccp refresh`.
+    """
     nodes, edges, details = [], [], {}
-    # collect typed nodes
     typed = {s: str(o) for s, _, o, _ in ds.quads((None, URIRef(P + "nodeType"), None, None))}
-    # verdict on judgment nodes (earl:outcome localname)
     EARL = URIRef("http://www.w3.org/ns/earl#outcome")
     own_verdict = {}
     for s, _, o, _ in ds.quads((None, EARL, None, None)):
         own_verdict[s] = str(o).rsplit("#", 1)[-1].rsplit("/", 1)[-1]
-    # governing judgment verdict for claims/assumptions it judges
     gov_verdict = {}
     for s, _, o, _ in ds.quads((None, URIRef(P + "judges"), None, None)):
         if s in own_verdict:
@@ -74,3 +83,9 @@ def trig_to_views(trig_path):
             edges.append({"src_id": _curie(s), "dst_id": _curie(o), "rel": rel})
     judgments_only = [n["id"] for n in nodes if n["type"] in ("assumption", "judgment")]
     return {"V1": nodes, "V2": edges, "V3": details, "V4": rests_on(edges), "V5": judgments_only}
+
+
+def trig_to_views(trig_path):
+    ds = Dataset()
+    ds.parse(trig_path, format="trig")
+    return trig_to_views_from_dataset(ds)
