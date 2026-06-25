@@ -30,8 +30,10 @@ jobs:
       - name: Export notebook to HTML
         run: |
           mkdir -p _site
+          # --no-include-code: hide source so the published page is a clean,
+          # layperson read (outputs only — graph + judgments, no code).
           uv run marimo export html notebooks/dashboard.py \
-            -o _site/index.html --include-code
+            -o _site/index.html --no-include-code
 
       - uses: actions/upload-pages-artifact@v3
         with:
