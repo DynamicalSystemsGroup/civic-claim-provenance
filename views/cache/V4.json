@@ -1,15 +1,27 @@
 {
-  "ev:demo-tonnage": [
-    "cl:demo-variation"
+  "ev:dsny-tonnage": [
+    "cl:composting-rate-describable"
   ],
-  "jd:demo-supported": [
-    "ev:demo-tonnage",
-    "cl:demo-variation"
+  "ev:waste-char-2023": [
+    "am:compostable-fraction"
   ],
-  "jd:demo-denominator": [
-    "am:demo-denominator"
+  "jd:data-sufficient": [
+    "ev:dsny-tonnage",
+    "cl:composting-rate-describable"
   ],
-  "at:demo-signoff": [
-    "cl:demo-variation"
+  "jd:mandate-effect-describable": [
+    "ev:dsny-tonnage",
+    "cl:composting-rate-describable"
+  ],
+  "jd:attribution-cantTell": [
+    "ev:dsny-tonnage",
+    "cl:composting-rate-describable"
+  ],
+  "jd:fraction-appropriate": [
+    "ev:waste-char-2023",
+    "am:compostable-fraction"
+  ],
+  "at:christine-signoff": [
+    "cl:composting-rate-describable"
   ]
 }
