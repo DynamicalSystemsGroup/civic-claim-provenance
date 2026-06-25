@@ -97,7 +97,7 @@ rather than inventing is what makes the epistemics both credible *and* legible.
 | --- | --- | --- |
 | Provenance | [PROV-O](https://www.w3.org/TR/prov-o/) | what was derived from what, attributed to whom, when |
 | Process | [P-Plan](http://purl.org/net/p-plan) | the analytic steps, their inputs/outputs, and ordering |
-| Argument | ontoGSN | goal ← strategy ← solution, with assumptions/justifications as first-class context |
+| Argument | [ontoGSN](https://fortiss.github.io/OntoGSN/) | goal ← strategy ← solution, with assumptions/justifications as first-class context |
 | Verdict | [EARL](https://www.w3.org/TR/EARL10-Schema/) | `passed` / `failed` / `cantTell`, each carrying a rationale |
 | Legibility | [SKOS](https://www.w3.org/TR/skos-reference/) | an audience reskin so the graph reads to a non-technical stakeholder |
 
