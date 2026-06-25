@@ -1,0 +1,145 @@
+# nyc-composting-real.trig
+# Real analysis — NYC residential-organics composting rate, post-mandate.
+# Coerced from: analysis/nyc_composting_spatiotemporal_1.ipynb (C. Rodríguez)
+# Dataset spine: ebb7-mvp5 (DSNY Monthly Tonnage, NYC Open Data)
+# Policy anchors: mandate Oct 6 2024, enforcement Apr 1 2025
+#
+# Conforms to the closure rules in ontology/closure_shapes.ttl.
+# Validated by: uv run ccp check fixtures/nyc-composting-real.trig
+
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+@prefix earl: <http://www.w3.org/ns/earl#> .
+@prefix dct:  <http://purl.org/dc/terms/> .
+@prefix p:    <urn:nyccompost:prop:> .
+@prefix cl:   <urn:nyccompost:claim:> .
+@prefix ev:   <urn:nyccompost:evidence:> .
+@prefix am:   <urn:nyccompost:assumption:> .
+@prefix jd:   <urn:nyccompost:judgment:> .
+@prefix at:   <urn:nyccompost:attestation:> .
+@prefix g:    <urn:nyccompost:graph:> .
+
+# --- argument layer: claims, assumptions, judgments -------------------------
+g:judgments {
+
+  # The one analytical claim: the rate is describable from the data.
+  # Two sub-readings coexist: a diversion rate (direct quotient) and a
+  # capture rate (modeled via the 0.358 compostable fraction). Both rest
+  # on the same evidence; the distinction is an assumption about the denominator.
+  cl:composting-rate-describable
+    p:nodeType "claim" ;
+    rdfs:label "Per-district residential-organics composting rate is describable from DSNY data" ;
+    p:statement "For all 59 NYC community districts, CY2021–present residential-organics composting rates (diversion and capture) are computable from DSNY Monthly Tonnage (ebb7-mvp5) without structural data gaps." ;
+    p:assumes am:compostable-fraction ;
+    p:assumes am:yard-waste-included .
+
+  # --- Assumptions ---
+
+  am:compostable-fraction
+    p:nodeType "assumption" ;
+    rdfs:label "Compostable fraction = 35.8% of total collected (2023 Waste Characterization Study)" ;
+    p:statement "The citywide residential compostable fraction is 35.8% of total collected tonnage, per the 2023 DSNY Waste Characterization Study. Applied uniformly across all 59 districts because no per-district breakdown is published. This is the denominator for the capture rate; its uniformity is a named caveat, not a silent default." .
+
+  am:yard-waste-included
+    p:nodeType "assumption" ;
+    rdfs:label "Yard waste and xmas trees included in organics numerator" ;
+    p:statement "The organics numerator sums resorganicstons + leavesorganictons + xmastreetons + otherorganicstons. Yard waste is included because the claim concerns total diversion, not curbside food only. Seasonal patterns are treated as honest variation, not noise to strip." .
+
+  # --- Judgments ---
+
+  jd:data-sufficient
+    p:nodeType "judgment" ;
+    rdfs:label "DSNY Monthly Tonnage (ebb7-mvp5) is sufficient to describe per-district composting rates" ;
+    p:decision "Is ebb7-mvp5 sufficient to describe per-district composting rates?" ;
+    p:chosen "yes — diversion rate is a direct quotient; capture rate requires the compostable-fraction assumption" ;
+    earl:outcome earl:passed ;
+    p:rationale "708 district-months (59 districts × 12 months CY2025) with zero structural nulls in tonnage columns. Month field parsed from 'YYYY / MM' text via regex; all 59 communitydistrict values stable across dataset. Numeric coercion handles Socrata text formatting." ;
+    p:attributer "C. Rodríguez" ;
+    p:pinnedAsOf "2026-06-24" ;
+    p:judges cl:composting-rate-describable ;
+    p:dependsOn ev:dsny-tonnage .
+
+  jd:fraction-appropriate
+    p:nodeType "judgment" ;
+    rdfs:label "35.8% compostable fraction is appropriate as stated assumption" ;
+    p:decision "Is the 2023 DSNY Waste Characterization Study 35.8% figure appropriate as the capture-rate denominator?" ;
+    p:chosen "yes, as an explicitly named assumption with stated caveat" ;
+    earl:outcome earl:passed ;
+    p:rationale "Only published citywide figure for NYC residential compostable fraction. Source: DSNY 2023 Waste Characterization Study. Caveat documented as assumption node: per-district breakdown unavailable; uniformity assumption is explicit, not silent." ;
+    p:attributer "C. Rodríguez" ;
+    p:pinnedAsOf "2026-06-24" ;
+    p:judges am:compostable-fraction ;
+    p:dependsOn ev:waste-char-2023 .
+
+  jd:mandate-effect-describable
+    p:nodeType "judgment" ;
+    rdfs:label "Post-mandate rate increase is visible in the data — describing claim only" ;
+    p:decision "Is a post-mandate composting rate change visible and describable from ebb7-mvp5?" ;
+    p:chosen "yes, as a describing claim; not an attribution claim" ;
+    earl:outcome earl:passed ;
+    p:rationale "Diversion rate rises after Oct 6 2024 across most districts. CY2025 is a rollout transient — districts are still climbing ~4× over the year — so the data describes a system mid-rollout, not equilibrium. The describing claim passes; the attribution claim (jd:attribution-cantTell) does not." ;
+    p:attributer "C. Rodríguez" ;
+    p:pinnedAsOf "2026-06-24" ;
+    p:judges cl:composting-rate-describable ;
+    p:dependsOn ev:dsny-tonnage .
+
+  jd:attribution-cantTell
+    p:nodeType "judgment" ;
+    rdfs:label "Causal attribution of rate increase to mandate — cannot tell" ;
+    p:decision "Can the observed post-Oct-2024 composting rate increase be causally attributed to the residential mandate?" ;
+    p:chosen "cannot determine — confounders unresolved" ;
+    earl:outcome earl:cantTell ;
+    p:rationale "Rollout transient (CY2025 mid-climb); seasonal confounders uncontrolled; no counterfactual district available; cannot distinguish mandate effect from organic growth in the universal-availability rollout. The increase is real and describable; its cause is not identifiable from this data alone." ;
+    p:attributer "C. Rodríguez" ;
+    p:pinnedAsOf "2026-06-24" ;
+    p:judges cl:composting-rate-describable ;
+    p:dependsOn ev:dsny-tonnage .
+}
+
+# --- evidence layer ---------------------------------------------------------
+g:evidence {
+
+  ev:dsny-tonnage
+    p:nodeType "evidence" ;
+    rdfs:label "DSNY Monthly Tonnage — per-district residential organics, CY2021–present" ;
+    p:sourceId "ebb7-mvp5" ;
+    p:sourceVersion "2026-06-24" ;
+    p:queryUrl "https://data.cityofnewyork.us/resource/ebb7-mvp5.json" ;
+    p:finding "708 district-months of residential-organics tonnage (59 districts × CY2021-present); zero structural nulls in resorganicstons, leavesorganictons, xmastreetons, otherorganicstons; month parsed from 'YYYY / MM' text; 25,060 rows total; diversion rate computable as direct quotient." ;
+    p:payloadSha256 "0000000000000000000000000000000000000000000000000000000000000000" ;
+    p:supports cl:composting-rate-describable .
+
+  ev:waste-char-2023
+    p:nodeType "evidence" ;
+    rdfs:label "DSNY 2023 Waste Characterization Study — citywide compostable fraction" ;
+    p:sourceId "waste-characterization-2023" ;
+    p:sourceVersion "2023" ;
+    p:queryUrl "https://dsny.cityofnewyork.us/wp-content/uploads/2024/03/2023-Waste-Characterization-Study.pdf" ;
+    p:finding "Citywide residential compostable fraction = 35.8% of total collected tonnage. Basis for capture-rate denominator. No per-district breakdown published in this study." ;
+    p:payloadSha256 "0000000000000000000000000000000000000000000000000000000000000000" ;
+    p:supports am:compostable-fraction .
+}
+
+# --- provenance layer -------------------------------------------------------
+g:provenance {
+  ev:dsny-tonnage
+    prov:wasDerivedFrom "ds:ebb7-mvp5@2026-06-24" ;
+    prov:generatedAtTime "2026-06-24T00:00:00Z" ;
+    dct:source "NYC Open Data — DSNY Monthly Tonnage and Recycling (ebb7-mvp5)" .
+
+  ev:waste-char-2023
+    prov:wasDerivedFrom "dsny:waste-characterization-study-2023" ;
+    prov:generatedAtTime "2023-01-01T00:00:00Z" ;
+    dct:source "DSNY 2023 Waste Characterization Study (PDF)" .
+}
+
+# --- attestation layer ------------------------------------------------------
+g:attestation {
+  at:christine-signoff
+    p:nodeType "attestation" ;
+    rdfs:label "Christine Rodríguez sign-off on composting rate analysis" ;
+    p:attester "Christine Rodríguez" ;
+    p:orgAuspice "Dynamical Systems Group (DSG)" ;
+    p:signedAt "2026-06-24T00:00:00Z" ;
+    p:attestsOver cl:composting-rate-describable .
+}
