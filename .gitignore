@@ -6,3 +6,6 @@ ui/dist/
 .DS_Store
 .claude/worktrees/
 .superpowers/
+
+# marimo session cache (generated)
+notebooks/__marimo__/
