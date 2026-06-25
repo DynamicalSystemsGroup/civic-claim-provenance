@@ -10,7 +10,8 @@ The demo reads the cache. Flexo is upstream of the cache only.
 ## Quickstart (no Flexo needed)
 ```bash
 uv sync
-uv run ccp seed-offline fixtures/graph-explorer-stub.trig   # regenerate cache
+# uv run ccp seed-offline fixtures/graph-explorer-stub.trig   # regenerate cache
+uv run ccp seed-offline
 uv run ccp serve                                            # backend on :8000
 cd ui && npm install && npm run dev                         # dashboard on :5173
 ```
