@@ -27,7 +27,7 @@ call, explainable at a glance).
 
 The discipline isn't new; the domain is. Traceable chains of evidence, provenance, and
 assurance arguments are how aerospace makes high-stakes decisions auditable. We port that
-battle-tested practice — from the [ADCS lifecycle
+battle-tested practice from aerospace — a publc demostration can found in the [ADCS lifecycle
 demo](https://github.com/DynamicalSystemsGroup/ADCS-lifecycle-demo) — to a civic
 determination over real NYC Open Data.
 
