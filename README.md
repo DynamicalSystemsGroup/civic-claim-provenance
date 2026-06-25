@@ -104,7 +104,8 @@ through one governed structure to the pinned evidence and the named human who si
 
 This is not a civic invention. Complex, distributed, *institutionally accountable* systems
 in aerospace and defense are engineered this way — the discipline behind model-based
-systems engineering and doctrines like the **Modular Open Systems Approach (MOSA)**, where
+systems engineering and doctrines like the **[Modular Open Systems Approach
+(MOSA)](https://www.cto.mil/sea/mosa/)**, where
 many vendors and institutions integrate against open standards and a shared authoritative
 reference rather than divergent private copies, so the whole system stays auditable across
 organizational seams. We bring the same ASoT discipline to a civic determination: one
