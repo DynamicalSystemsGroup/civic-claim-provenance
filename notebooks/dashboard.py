@@ -275,7 +275,8 @@ def _(judgments_df, mo):
             ),
             mo.ui.table(judgments_df, selection=None, pagination=True),
         ])
-    judgments_view
+    # Built here but NOT displayed standalone — it is shown only inside the
+    # "Judgments" tab below (avoids rendering the table twice).
     return (judgments_view,)
 
 
