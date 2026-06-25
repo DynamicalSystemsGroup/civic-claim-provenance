@@ -1,6 +1,41 @@
-@prefix sh: <http://www.w3.org/ns/shacl#> .
-@prefix p:  <urn:nyccompost:prop:> .
+@prefix sh:   <http://www.w3.org/ns/shacl#> .
+@prefix p:    <urn:nyccompost:prop:> .
+@prefix earl: <http://www.w3.org/ns/earl#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+
+# 1. Every typed node must have a human-readable label
 [] a sh:NodeShape ;
-   sh:targetSubjectsOf p:chosen ;     # every node that made a choice (a judgment)
-   sh:property [ sh:path p:rationale ; sh:minCount 1 ;
-                 sh:message "judgment lacks a rationale (WP-1b closure)" ] .
+   sh:targetSubjectsOf p:nodeType ;
+   sh:property [ sh:path rdfs:label ; sh:minCount 1 ;
+                 sh:message "typed node lacks rdfs:label" ] .
+
+# 2. Judgments — every field the capture template requires.
+#    Targeted via p:chosen, which only judgments carry.
+[] a sh:NodeShape ;
+   sh:targetSubjectsOf p:chosen ;
+   sh:property [ sh:path p:decision   ; sh:minCount 1 ;
+                 sh:message "judgment lacks p:decision" ] ;
+   sh:property [ sh:path p:rationale  ; sh:minCount 1 ;
+                 sh:message "judgment lacks p:rationale (WP-1b closure)" ] ;
+   sh:property [ sh:path p:attributer ; sh:minCount 1 ;
+                 sh:message "judgment lacks p:attributer — anonymous judgments are unaccountable" ] ;
+   sh:property [ sh:path earl:outcome ; sh:minCount 1 ;
+                 sh:message "judgment lacks earl:outcome (verdict required)" ] ;
+   sh:property [ sh:path p:judges     ; sh:minCount 1 ;
+                 sh:message "judgment must judge at least one claim or assumption" ] .
+
+# 3. Evidence — must name a finding and a source.
+#    Targeted via p:sourceId, which only evidence carries.
+[] a sh:NodeShape ;
+   sh:targetSubjectsOf p:sourceId ;
+   sh:property [ sh:path p:finding ; sh:minCount 1 ;
+                 sh:message "evidence lacks p:finding" ] .
+
+# 4. Attestations — must attest over something and name an org auspice.
+#    Targeted via p:attester, which only attestations carry.
+[] a sh:NodeShape ;
+   sh:targetSubjectsOf p:attester ;
+   sh:property [ sh:path p:attestsOver ; sh:minCount 1 ;
+                 sh:message "attestation lacks p:attestsOver" ] ;
+   sh:property [ sh:path p:orgAuspice  ; sh:minCount 1 ;
+                 sh:message "attestation lacks p:orgAuspice" ] .

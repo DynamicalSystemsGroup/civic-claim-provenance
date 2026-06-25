@@ -35,6 +35,29 @@ def seed_offline(trig: str = "fixtures/graph-explorer-stub.trig"):
     typer.echo(f"cache written from {trig}")
 
 @app.command()
+def check(trig: str = typer.Argument("fixtures/graph-explorer-stub.trig")):
+    """Validate a .trig against the closure shapes. Exit 1 on violations."""
+    from rdflib import Dataset, Graph
+    from ontology.shacl_runner import run_shacl, load_shapes
+
+    ds = Dataset()
+    ds.parse(trig, format="trig")
+    data = Graph()
+    for q in ds.quads():
+        data.add(q[:3])
+
+    shapes = load_shapes(ROOT / "ontology" / "closure_shapes.ttl")
+    result = run_shacl(data, shapes)
+
+    if result.conforms:
+        typer.echo(f"OK  {trig}")
+    else:
+        typer.echo(f"FAIL {trig} — {result.violation_count} violation(s)", err=True)
+        for v in result.violations:
+            typer.echo(f"  {v.focus_node}: {v.message}", err=True)
+        raise typer.Exit(1)
+
+@app.command()
 def load(trig: str, base: str = "master"):
     """Load a .trig into Flexo (one branch per named graph, flat INSERT DATA).
 
