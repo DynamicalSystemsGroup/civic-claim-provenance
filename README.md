@@ -27,8 +27,8 @@ call, explainable at a glance).
 
 The discipline isn't new; the domain is. Traceable chains of evidence, provenance, and
 assurance arguments are how aerospace makes high-stakes decisions auditable. We port that
-battle-tested practice from aerospace — a publc demostration can found in the [ADCS lifecycle
-demo](https://github.com/DynamicalSystemsGroup/ADCS-lifecycle-demo) — to a civic
+battle-tested practice from aerospace — a public demonstration can be found in the [ADCS
+lifecycle demo](https://github.com/DynamicalSystemsGroup/ADCS-lifecycle-demo) — to a civic
 determination over real NYC Open Data.
 
 ## The case — NYC residential-organics composting
@@ -85,6 +85,31 @@ a `.trig` (`ccp seed-offline`), or from Flexo via SPARQL (`ccp refresh`).
 Reasoning is checked by **closure rules** (`ccp check`): no claim without supporting
 evidence or an explicit can't-tell; every verdict carries a rationale; evidence and
 judgment kept in separate named graphs; attestation attributed to a person.
+
+## The authoritative source of truth
+
+Behind the cache sits the thing that makes the chain trustworthy: a single
+**authoritative source of truth (ASoT)** — the version-controlled Flexo model. Everything a
+reader sees (the JSON cache, the graph, the judgments table) is a *projection* of that one
+governed model, never an independent copy. Change the model and regenerate; nothing
+downstream can drift from it or assert something the model doesn't contain. That is exactly
+why the cache is the *only* interface between layers — it is generated, never authored.
+
+Crucially it is an *authoritative* source of truth, not a naive *single* one: the model
+does not claim to be where the facts originate — it **cites and pins its upstream sources**
+(the DSNY datasets, hashed and dated) and records who judged what, on what grounds. It is
+the accountable apex of a chain of custody, not an oracle. That distinction is what
+institutional accountability needs: an auditor can start from any conclusion and walk back
+through one governed structure to the pinned evidence and the named human who signed it.
+
+This is not a civic invention. Complex, distributed, *institutionally accountable* systems
+in aerospace and defense are engineered this way — the discipline behind model-based
+systems engineering and doctrines like the **Modular Open Systems Approach (MOSA)**, where
+many vendors and institutions integrate against open standards and a shared authoritative
+reference rather than divergent private copies, so the whole system stays auditable across
+organizational seams. We bring the same ASoT discipline to a civic determination: one
+governed, openly-standardized model that a citizen, an official, and an auditor can all
+point to and trust.
 
 ## The assembled ontology — borrow, don't invent
 
