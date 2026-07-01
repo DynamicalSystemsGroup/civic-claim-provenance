@@ -1,82 +1,47 @@
 {
-  "cl:composting-rate-describable": {
+  "cl:demo-variation": {
     "type": "claim",
-    "statement": "For all 59 NYC community districts, CY2021–present residential-organics composting rates (diversion and capture) are computable from DSNY Monthly Tonnage (ebb7-mvp5) without structural data gaps.",
-    "status": "cantTell"
+    "statement": "Per-district CY2025 residential-organics tonnage per capita is not uniform.",
+    "status": "passed"
   },
-  "am:compostable-fraction": {
+  "am:demo-denominator": {
     "type": "assumption",
-    "statement": "The citywide residential compostable fraction is 35.8% of total collected tonnage, per the 2023 DSNY Waste Characterization Study. Applied uniformly across all 59 districts because no per-district breakdown is published. This is the denominator for the capture rate; its uniformity is a named caveat, not a silent default."
+    "statement": "Denominator = 2010 CD-native population (placeholder; stale)."
   },
-  "am:yard-waste-included": {
-    "type": "assumption",
-    "statement": "The organics numerator sums resorganicstons + leavesorganictons + xmastreetons + otherorganicstons. Yard waste is included because the claim concerns total diversion, not curbside food only. Seasonal patterns are treated as honest variation, not noise to strip."
-  },
-  "jd:data-sufficient": {
+  "jd:demo-supported": {
     "type": "judgment",
-    "judges": "cl:composting-rate-describable",
-    "decision": "Is ebb7-mvp5 sufficient to describe per-district composting rates?",
-    "chosen": "yes — diversion rate is a direct quotient; capture rate requires the compostable-fraction assumption",
-    "grounding": "708 district-months (59 districts × 12 months CY2025) with zero structural nulls in tonnage columns. Month field parsed from 'YYYY / MM' text via regex; all 59 communitydistrict values stable across dataset. Numeric coercion handles Socrata text formatting.",
-    "attributer": "C. Rodríguez",
-    "rationale": "708 district-months (59 districts × 12 months CY2025) with zero structural nulls in tonnage columns. Month field parsed from 'YYYY / MM' text via regex; all 59 communitydistrict values stable across dataset. Numeric coercion handles Socrata text formatting.",
-    "pinned_as_of": "2026-06-24",
+    "judges": "cl:demo-variation",
+    "decision": "Is per-district CY2025 tonnage describable?",
+    "chosen": "supported",
+    "grounding": "Complete series, 708 = 59x12, zero missing (synthetic mirror).",
+    "attributer": "A. Analyst",
+    "rationale": "Complete series, 708 = 59x12, zero missing (synthetic mirror).",
+    "pinned_as_of": "2026-06-01",
     "earl_outcome": "passed"
   },
-  "jd:fraction-appropriate": {
+  "jd:demo-denominator": {
     "type": "judgment",
-    "judges": "am:compostable-fraction",
-    "decision": "Is the 2023 DSNY Waste Characterization Study 35.8% figure appropriate as the capture-rate denominator?",
-    "chosen": "yes, as an explicitly named assumption with stated caveat",
-    "grounding": "Only published citywide figure for NYC residential compostable fraction. Source: DSNY 2023 Waste Characterization Study. Caveat documented as assumption node: per-district breakdown unavailable; uniformity assumption is explicit, not silent.",
-    "attributer": "C. Rodríguez",
-    "rationale": "Only published citywide figure for NYC residential compostable fraction. Source: DSNY 2023 Waste Characterization Study. Caveat documented as assumption node: per-district breakdown unavailable; uniformity assumption is explicit, not silent.",
-    "pinned_as_of": "2026-06-24",
-    "earl_outcome": "passed"
-  },
-  "jd:mandate-effect-describable": {
-    "type": "judgment",
-    "judges": "cl:composting-rate-describable",
-    "decision": "Is a post-mandate composting rate change visible and describable from ebb7-mvp5?",
-    "chosen": "yes, as a describing claim; not an attribution claim",
-    "grounding": "Diversion rate rises after Oct 6 2024 across most districts. CY2025 is a rollout transient — districts are still climbing ~4× over the year — so the data describes a system mid-rollout, not equilibrium. The describing claim passes; the attribution claim (jd:attribution-cantTell) does not.",
-    "attributer": "C. Rodríguez",
-    "rationale": "Diversion rate rises after Oct 6 2024 across most districts. CY2025 is a rollout transient — districts are still climbing ~4× over the year — so the data describes a system mid-rollout, not equilibrium. The describing claim passes; the attribution claim (jd:attribution-cantTell) does not.",
-    "pinned_as_of": "2026-06-24",
-    "earl_outcome": "passed"
-  },
-  "jd:attribution-cantTell": {
-    "type": "judgment",
-    "judges": "cl:composting-rate-describable",
-    "decision": "Can the observed post-Oct-2024 composting rate increase be causally attributed to the residential mandate?",
-    "chosen": "cannot determine — confounders unresolved",
-    "grounding": "Rollout transient (CY2025 mid-climb); seasonal confounders uncontrolled; no counterfactual district available; cannot distinguish mandate effect from organic growth in the universal-availability rollout. The increase is real and describable; its cause is not identifiable from this data alone.",
-    "attributer": "C. Rodríguez",
-    "rationale": "Rollout transient (CY2025 mid-climb); seasonal confounders uncontrolled; no counterfactual district available; cannot distinguish mandate effect from organic growth in the universal-availability rollout. The increase is real and describable; its cause is not identifiable from this data alone.",
-    "pinned_as_of": "2026-06-24",
+    "judges": "am:demo-denominator",
+    "decision": "Which population denominator?",
+    "chosen": "deferred - needs human judgment",
+    "grounding": "Currency vs CD-native cleanliness; normative, data cannot pick.",
+    "attributer": "A. Analyst",
+    "rationale": "Currency vs CD-native cleanliness; normative, data cannot pick.",
     "earl_outcome": "cantTell"
   },
-  "ev:dsny-tonnage": {
+  "ev:demo-tonnage": {
     "type": "evidence",
     "source_id": "ebb7-mvp5",
-    "source_version": "2026-06-24",
-    "query_url": "https://data.cityofnewyork.us/resource/ebb7-mvp5.json",
-    "finding": "708 district-months of residential-organics tonnage (59 districts × CY2021-present); zero structural nulls in resorganicstons, leavesorganictons, xmastreetons, otherorganicstons; month parsed from 'YYYY / MM' text; 25,060 rows total; diversion rate computable as direct quotient.",
+    "source_version": "2026-06-01",
+    "query_url": "https://example.invalid/synthetic-query",
+    "finding": "Synthetic per-district tonnage series.",
     "payload_sha256": "0000000000000000000000000000000000000000000000000000000000000000"
   },
-  "ev:waste-char-2023": {
-    "type": "evidence",
-    "source_id": "waste-characterization-2023",
-    "source_version": "2023",
-    "query_url": "https://dsny.cityofnewyork.us/wp-content/uploads/2024/03/2023-Waste-Characterization-Study.pdf",
-    "finding": "Citywide residential compostable fraction = 35.8% of total collected tonnage. Basis for capture-rate denominator. No per-district breakdown published in this study.",
-    "payload_sha256": "0000000000000000000000000000000000000000000000000000000000000000"
-  },
-  "at:christine-signoff": {
+  "at:demo-signoff": {
     "type": "attestation",
-    "attester": "Christine Rodríguez",
-    "org_auspice": "Dynamical Systems Group (DSG)",
-    "signed_at": "2026-06-24T00:00:00Z",
-    "attests_over": "cl:composting-rate-describable"
+    "attester": "Jane Official",
+    "org_auspice": "NYC DSNY (synthetic)",
+    "signed_at": "2026-06-24T20:00:00Z",
+    "attests_over": "cl:demo-variation"
   }
 }

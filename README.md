@@ -37,7 +37,7 @@ We trace one concrete claim: *per-district residential-organics composting **rat
 (diversion and capture) is describable from DSNY data* — all 59 community districts,
 CY2021–present, with no structural data gaps. Each evidence reading is pinned to its
 source and hashed; each interpretive link gets an honest verdict with a named rationale;
-and **Christine Rodríguez** signs over the panel.
+and **Christine Vandevoorde** signs over the panel.
 
 The honesty is the point — the verdicts include **can't-tell**, not just *supported*:
 

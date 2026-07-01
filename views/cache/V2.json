@@ -1,67 +1,37 @@
 [
   {
-    "src_id": "ev:dsny-tonnage",
-    "dst_id": "cl:composting-rate-describable",
+    "src_id": "ev:demo-tonnage",
+    "dst_id": "cl:demo-variation",
     "rel": "supports"
   },
   {
-    "src_id": "ev:waste-char-2023",
-    "dst_id": "am:compostable-fraction",
-    "rel": "supports"
-  },
-  {
-    "src_id": "jd:data-sufficient",
-    "dst_id": "cl:composting-rate-describable",
+    "src_id": "jd:demo-supported",
+    "dst_id": "cl:demo-variation",
     "rel": "judges"
   },
   {
-    "src_id": "jd:mandate-effect-describable",
-    "dst_id": "cl:composting-rate-describable",
+    "src_id": "jd:demo-denominator",
+    "dst_id": "am:demo-denominator",
     "rel": "judges"
   },
   {
-    "src_id": "jd:attribution-cantTell",
-    "dst_id": "cl:composting-rate-describable",
-    "rel": "judges"
-  },
-  {
-    "src_id": "jd:fraction-appropriate",
-    "dst_id": "am:compostable-fraction",
-    "rel": "judges"
-  },
-  {
-    "src_id": "jd:data-sufficient",
-    "dst_id": "ev:dsny-tonnage",
+    "src_id": "jd:demo-supported",
+    "dst_id": "ev:demo-tonnage",
     "rel": "dependsOn"
   },
   {
-    "src_id": "jd:mandate-effect-describable",
-    "dst_id": "ev:dsny-tonnage",
+    "src_id": "jd:demo-denominator",
+    "dst_id": "am:demo-denominator",
     "rel": "dependsOn"
   },
   {
-    "src_id": "jd:attribution-cantTell",
-    "dst_id": "ev:dsny-tonnage",
-    "rel": "dependsOn"
-  },
-  {
-    "src_id": "jd:fraction-appropriate",
-    "dst_id": "ev:waste-char-2023",
-    "rel": "dependsOn"
-  },
-  {
-    "src_id": "cl:composting-rate-describable",
-    "dst_id": "am:compostable-fraction",
+    "src_id": "cl:demo-variation",
+    "dst_id": "am:demo-denominator",
     "rel": "assumes"
   },
   {
-    "src_id": "cl:composting-rate-describable",
-    "dst_id": "am:yard-waste-included",
-    "rel": "assumes"
-  },
-  {
-    "src_id": "at:christine-signoff",
-    "dst_id": "cl:composting-rate-describable",
+    "src_id": "at:demo-signoff",
+    "dst_id": "cl:demo-variation",
     "rel": "attestsOver"
   }
 ]

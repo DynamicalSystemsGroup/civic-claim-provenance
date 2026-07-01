@@ -1,6 +1,6 @@
 # nyc-composting-real.trig
 # Real analysis — NYC residential-organics composting rate, post-mandate.
-# Coerced from: analysis/nyc_composting_spatiotemporal_1.ipynb (C. Rodríguez)
+# Coerced from: analysis/nyc_composting_spatiotemporal_1.ipynb (C. Vandevoorde)
 # Dataset spine: ebb7-mvp5 (DSNY Monthly Tonnage, NYC Open Data)
 # Policy anchors: mandate Oct 6 2024, enforcement Apr 1 2025
 #
@@ -54,7 +54,7 @@ g:judgments {
     p:chosen "yes — diversion rate is a direct quotient; capture rate requires the compostable-fraction assumption" ;
     earl:outcome earl:passed ;
     p:rationale "708 district-months (59 districts × 12 months CY2025) with zero structural nulls in tonnage columns. Month field parsed from 'YYYY / MM' text via regex; all 59 communitydistrict values stable across dataset. Numeric coercion handles Socrata text formatting." ;
-    p:attributer "C. Rodríguez" ;
+    p:attributer "C. Vandevoorde" ;
     p:pinnedAsOf "2026-06-24" ;
     p:judges cl:composting-rate-describable ;
     p:dependsOn ev:dsny-tonnage .
@@ -66,7 +66,7 @@ g:judgments {
     p:chosen "yes, as an explicitly named assumption with stated caveat" ;
     earl:outcome earl:passed ;
     p:rationale "Only published citywide figure for NYC residential compostable fraction. Source: DSNY 2023 Waste Characterization Study. Caveat documented as assumption node: per-district breakdown unavailable; uniformity assumption is explicit, not silent." ;
-    p:attributer "C. Rodríguez" ;
+    p:attributer "C. Vandevoorde" ;
     p:pinnedAsOf "2026-06-24" ;
     p:judges am:compostable-fraction ;
     p:dependsOn ev:waste-char-2023 .
@@ -78,7 +78,7 @@ g:judgments {
     p:chosen "yes, as a describing claim; not an attribution claim" ;
     earl:outcome earl:passed ;
     p:rationale "Diversion rate rises after Oct 6 2024 across most districts. CY2025 is a rollout transient — districts are still climbing ~4× over the year — so the data describes a system mid-rollout, not equilibrium. The describing claim passes; the attribution claim (jd:attribution-cantTell) does not." ;
-    p:attributer "C. Rodríguez" ;
+    p:attributer "C. Vandevoorde" ;
     p:pinnedAsOf "2026-06-24" ;
     p:judges cl:composting-rate-describable ;
     p:dependsOn ev:dsny-tonnage .
@@ -90,7 +90,7 @@ g:judgments {
     p:chosen "cannot determine — confounders unresolved" ;
     earl:outcome earl:cantTell ;
     p:rationale "Rollout transient (CY2025 mid-climb); seasonal confounders uncontrolled; no counterfactual district available; cannot distinguish mandate effect from organic growth in the universal-availability rollout. The increase is real and describable; its cause is not identifiable from this data alone." ;
-    p:attributer "C. Rodríguez" ;
+    p:attributer "C. Vandevoorde" ;
     p:pinnedAsOf "2026-06-24" ;
     p:judges cl:composting-rate-describable ;
     p:dependsOn ev:dsny-tonnage .
@@ -137,8 +137,8 @@ g:provenance {
 g:attestation {
   at:christine-signoff
     p:nodeType "attestation" ;
-    rdfs:label "Christine Rodríguez sign-off on composting rate analysis" ;
-    p:attester "Christine Rodríguez" ;
+    rdfs:label "Christine Vandevoorde sign-off on composting rate analysis" ;
+    p:attester "Christine Vandevoorde" ;
     p:orgAuspice "Dynamical Systems Group (DSG)" ;
     p:signedAt "2026-06-24T00:00:00Z" ;
     p:attestsOver cl:composting-rate-describable .
