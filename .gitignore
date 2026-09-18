@@ -6,3 +6,6 @@ ui/dist/
 .DS_Store
 .claude/worktrees/
 .superpowers/
+
+# Jupyter
+**/.ipynb_checkpoints/
