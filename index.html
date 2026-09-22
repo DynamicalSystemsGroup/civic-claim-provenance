@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" href="./favicon.ico" />
+    <!-- Preload is necessary because we show these images when we disconnect from the server,
+    but at that point we cannot load these images from the server -->
+    <link rel="preload" href="./assets/gradient-yHQUC_QB.png" as="image" />
+    <link rel="preload" href="./assets/noise-60BoTA8O.png" as="image" />
+    <!-- Preload the fonts -->
+    <link rel="preload" href="./assets/Lora-VariableFont_wght-CZceb_kH.woff2" as="font" type="font/woff2" crossorigin="anonymous" />
+    <link rel="preload" href="./assets/PTSans-Regular-Bam3NpBI.woff2" as="font" type="font/woff2" crossorigin="anonymous" />
+    <link rel="preload" href="./assets/PTSans-Bold-C_DwAp7Z.woff2" as="font" type="font/woff2" crossorigin="anonymous" />
+    <link rel="preload" href="./assets/FiraMono-Regular-CEsLFVD9.woff2" as="font" type="font/woff2" crossorigin="anonymous" />
+    <link rel="preload" href="./assets/FiraMono-Medium-D5MAsWEG.woff2" as="font" type="font/woff2" crossorigin="anonymous" />
+    <link rel="preload" href="./assets/FiraMono-Bold-C6PDArdf.woff2" as="font" type="font/woff2" crossorigin="anonymous" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#000000" />
+    <meta name="description" content="a marimo app" />
+    <link rel="apple-touch-icon" href="./apple-touch-icon.png" />
+    <link rel="manifest" href="./manifest.json" />
+
+    <script data-marimo="true">
+      function __resizeIframe(obj) {
+        const scrollbarHeight = 20; // Max between windows, mac, and linux
+
+        function setHeight() {
+          // Guard against race condition where iframe isn't ready
+          if (!obj.contentWindow?.document?.documentElement) {
+            return;
+          }
+          const element = obj.contentWindow.document.documentElement;
+          // If there is no vertical scrollbar, we don't need to resize the iframe
+          if (element.scrollHeight === element.clientHeight) {
+            return;
+          }
+
+          // Create a new height that includes the scrollbar height if it's visible
+          const hasHorizontalScrollbar = element.scrollWidth > element.clientWidth;
+          const newHeight = element.scrollHeight + (hasHorizontalScrollbar ? scrollbarHeight : 0);
+
+          // Only update the height if it's different from the current height
+          if (obj.style.height !== `${newHeight}px`) {
+            obj.style.height = `${newHeight}px`;
+          }
+        }
+
+        // Resize the iframe to the height of the content and bottom scrollbar height
+        setHeight();
+
+        // Resize the iframe when the content changes
+        const resizeObserver = new ResizeObserver((_entries) => {
+          setHeight();
+        });
+        // Only observe if iframe content is ready
+        if (obj.contentWindow?.document?.body) {
+          resizeObserver.observe(obj.contentWindow.document.body);
+        }
+      }
+    </script>
+    <marimo-filename hidden>notebook.py</marimo-filename>
+    <!-- TODO(Trevor): Legacy, required by VS Code plugin. Remove when plugin is updated (see marimo/server/_templates/template.py) -->
+    <marimo-version data-version="{{ version }}" hidden></marimo-version>
+    <marimo-user-config data-config="{{ user_config }}" hidden></marimo-user-config>
+    <marimo-server-token data-token="{{ server_token }}" hidden></marimo-server-token>
+    <!-- /TODO -->
+    <title>composting dashboard</title>
+    <script type="module" crossorigin src="./assets/index-4n22QjCD.js"></script>
+    <link rel="modulepreload" crossorigin href="./assets/rolldown-runtime-B0Z9INg1.js">
+    <link rel="modulepreload" crossorigin href="./assets/react-CBDbhulC.js">
+    <link rel="modulepreload" crossorigin href="./assets/compiler-runtime-CYIjoINj.js">
+    <link rel="modulepreload" crossorigin href="./assets/useEvent-xfs0Sn4r.js">
+    <link rel="modulepreload" crossorigin href="./assets/react-dom-BQrReHnR.js">
+    <link rel="modulepreload" crossorigin href="./assets/schemas-aTUejmFi.js">
+    <link rel="modulepreload" crossorigin href="./assets/isObject-BCaOs5rp.js">
+    <link rel="modulepreload" crossorigin href="./assets/isSymbol-oX0TOjjx.js">
+    <link rel="modulepreload" crossorigin href="./assets/now-Cmx0b_zA.js">
+    <link rel="modulepreload" crossorigin href="./assets/debounce-aFmHgJZY.js">
+    <link rel="modulepreload" crossorigin href="./assets/isArrayLikeObject-DnwgSs_Z.js">
+    <link rel="modulepreload" crossorigin href="./assets/_initCloneObject-CM3WilQg.js">
+    <link rel="modulepreload" crossorigin href="./assets/_baseMerge-DLqSVasz.js">
+    <link rel="modulepreload" crossorigin href="./assets/objects-snlMn4yk.js">
+    <link rel="modulepreload" crossorigin href="./assets/jsx-runtime-B74pBk57.js">
+    <link rel="modulepreload" crossorigin href="./assets/useEventListener-92uWqz-P.js">
+    <link rel="modulepreload" crossorigin href="./assets/invariant-Ci2dTZ72.js">
+    <link rel="modulepreload" crossorigin href="./assets/utils-D5Ywm7-q.js">
+    <link rel="modulepreload" crossorigin href="./assets/constants-BDbGiS7O.js">
+    <link rel="modulepreload" crossorigin href="./assets/Deferred-CrTnjj37.js">
+    <link rel="modulepreload" crossorigin href="./assets/session-Sz5nSFku.js">
+    <link rel="modulepreload" crossorigin href="./assets/config-BlNM0caL.js">
+    <link rel="modulepreload" crossorigin href="./assets/clsx-DB0hHKMi.js">
+    <link rel="modulepreload" crossorigin href="./assets/cn-ldLVeaqm.js">
+    <link rel="modulepreload" crossorigin href="./assets/fullscreen-BH2jz-F4.js">
+    <link rel="modulepreload" crossorigin href="./assets/dist-DzCQtGkt.js">
+    <link rel="modulepreload" crossorigin href="./assets/menu-items-BSRA2YI9.js">
+    <link rel="modulepreload" crossorigin href="./assets/button-Dh8EwhsF.js">
+    <link rel="modulepreload" crossorigin href="./assets/alert-dialog-CA-2mBs3.js">
+    <link rel="modulepreload" crossorigin href="./assets/createLucideIcon-B7HeEoG2.js">
+    <link rel="modulepreload" crossorigin href="./assets/check-BoA6XBpj.js">
+    <link rel="modulepreload" crossorigin href="./assets/context-Do8M9TDF.js">
+    <link rel="modulepreload" crossorigin href="./assets/useNumberFormatter-DHJ9s6Vk.js">
+    <link rel="modulepreload" crossorigin href="./assets/select-nLt2y0Sw.js">
+    <link rel="modulepreload" crossorigin href="./assets/circle-ByJdIf5p.js">
+    <link rel="modulepreload" crossorigin href="./assets/tooltip-BUtPzKB4.js">
+    <link rel="modulepreload" crossorigin href="./assets/dist-BtC9ym6k.js">
+    <link rel="modulepreload" crossorigin href="./assets/dist-CZNULd6Z.js">
+    <link rel="modulepreload" crossorigin href="./assets/arrays-BqUx5USx.js">
+    <link rel="modulepreload" crossorigin href="./assets/once-Haz_uxEL.js">
+    <link rel="modulepreload" crossorigin href="./assets/capabilities-D8kPgMKr.js">
+    <link rel="modulepreload" crossorigin href="./assets/cjs-C49f7GXV.js">
+    <link rel="modulepreload" crossorigin href="./assets/createReducer-B_XmHROl.js">
+    <link rel="modulepreload" crossorigin href="./assets/dist-DiYjQAhI.js">
+    <link rel="modulepreload" crossorigin href="./assets/marked.esm-B_3iMIUq.js">
+    <link rel="modulepreload" crossorigin href="./assets/strings-CReV1AYG.js">
+    <link rel="modulepreload" crossorigin href="./assets/requests-C6_IaFh7.js">
+    <link rel="modulepreload" crossorigin href="./assets/dist-B8pdsUrS.js">
+    <link rel="modulepreload" crossorigin href="./assets/useLifecycle-BUaJcygz.js">
+    <link rel="modulepreload" crossorigin href="./assets/toDate-hGYJX0Ha.js">
+    <link rel="modulepreload" crossorigin href="./assets/database-zap-CloO6gbw.js">
+    <link rel="modulepreload" crossorigin href="./assets/numbers-Bc-r3jsC.js">
+    <link rel="modulepreload" crossorigin href="./assets/useDebounce-DgpSQhrP.js">
+    <link rel="modulepreload" crossorigin href="./assets/input-DEbY281O.js">
+    <link rel="modulepreload" crossorigin href="./assets/uuid-k9DpjH68.js">
+    <link rel="modulepreload" crossorigin href="./assets/use-toast-DpWHUGuF.js">
+    <link rel="modulepreload" crossorigin href="./assets/write-secret-modal-D6zoZgLY.js">
+    <link rel="modulepreload" crossorigin href="./assets/plus-C4J9gIE1.js">
+    <link rel="modulepreload" crossorigin href="./assets/trash-2-D_HX-0qx.js">
+    <link rel="modulepreload" crossorigin href="./assets/badge-BSgtkC2e.js">
+    <link rel="modulepreload" crossorigin href="./assets/preload-helper-HclGiUj8.js">
+    <link rel="modulepreload" crossorigin href="./assets/dist-DkPPv0FB.js">
+    <link rel="modulepreload" crossorigin href="./assets/dist-Dw9YRsCU.js">
+    <link rel="modulepreload" crossorigin href="./assets/dist-B0RXffUm.js">
+    <link rel="modulepreload" crossorigin href="./assets/dist-Cx4BE7jC.js">
+    <link rel="modulepreload" crossorigin href="./assets/dist-CKUpxYGQ.js">
+    <link rel="modulepreload" crossorigin href="./assets/stex-Dc5bKD4z.js">
+    <link rel="modulepreload" crossorigin href="./assets/paths-zcL04qUW.js">
+    <link rel="modulepreload" crossorigin href="./assets/useTheme-C-ri8BtY.js">
+    <link rel="modulepreload" crossorigin href="./assets/useAsyncData-Buhk-UgR.js">
+    <link rel="modulepreload" crossorigin href="./assets/purify.es-DrVcFY1Q.js">
+    <link rel="modulepreload" crossorigin href="./assets/cells-Cp-G34Rz.js">
+    <link rel="modulepreload" crossorigin href="./assets/get-DjNf4SIX.js">
+    <link rel="modulepreload" crossorigin href="./assets/_hasPath-BmRQipI0.js">
+    <link rel="modulepreload" crossorigin href="./assets/hasIn-yw4sIeJR.js">
+    <link rel="modulepreload" crossorigin href="./assets/_baseSet-gX6o3Pih.js">
+    <link rel="modulepreload" crossorigin href="./assets/pick-Bs4cJfJU.js">
+    <link rel="modulepreload" crossorigin href="./assets/errors-DzO-nXy-.js">
+    <link rel="modulepreload" crossorigin href="./assets/switch-DjXr9Y9D.js">
+    <link rel="modulepreload" crossorigin href="./assets/copy-BMXKNElG.js">
+    <link rel="modulepreload" crossorigin href="./assets/eye-off-CFuPxa9F.js">
+    <link rel="modulepreload" crossorigin href="./assets/copy-DlEomWzI.js">
+    <link rel="modulepreload" crossorigin href="./assets/extends-CvVTau-c.js">
+    <link rel="modulepreload" crossorigin href="./assets/esm-BHMOvJzM.js">
+    <link rel="modulepreload" crossorigin href="./assets/useAddCell-DdB_uBif.js">
+    <link rel="modulepreload" crossorigin href="./assets/readonly-python-code-DpIyjHqY.js">
+    <link rel="modulepreload" crossorigin href="./assets/LazyAnyLanguageCodeMirror-LboTfNDv.js">
+    <link rel="modulepreload" crossorigin href="./assets/micromark-factory-space-D9Dr-k4J.js">
+    <link rel="modulepreload" crossorigin href="./assets/chunk-5FQGJX7Z-CRg4xQWg.js">
+    <link rel="modulepreload" crossorigin href="./assets/markdown-renderer-BZKlbm2Q.js">
+    <link rel="modulepreload" crossorigin href="./assets/copy-icon-z8fuTE3w.js">
+    <link rel="modulepreload" crossorigin href="./assets/useRunCells-CX7oW5zy.js">
+    <link rel="modulepreload" crossorigin href="./assets/RenderHTML-DwhMAd9l.js">
+    <link rel="modulepreload" crossorigin href="./assets/blob-B2d_dHwI.js">
+    <link rel="modulepreload" crossorigin href="./assets/share-CPtBiNgr.js">
+    <link rel="modulepreload" crossorigin href="./assets/events-CbeVJ6OD.js">
+    <link rel="modulepreload" crossorigin href="./assets/state-Di9TbuV9.js">
+    <link rel="modulepreload" crossorigin href="./assets/ErrorBoundary-CDVGFYfr.js">
+    <link rel="modulepreload" crossorigin href="./assets/config-B-r81uZ6.js">
+    <link rel="modulepreload" crossorigin href="./assets/tabs-Cy1qXLzH.js">
+    <link rel="modulepreload" crossorigin href="./assets/chevron-right-CKA5zVsM.js">
+    <link rel="modulepreload" crossorigin href="./assets/dropdown-menu-C40jM9o4.js">
+    <link rel="modulepreload" crossorigin href="./assets/html-to-image-D6GUC5q6.js">
+    <link rel="modulepreload" crossorigin href="./assets/download-DMxOzI7b.js">
+    <link rel="modulepreload" crossorigin href="./assets/table-CUK1W5bI.js">
+    <link rel="modulepreload" crossorigin href="./assets/refresh-cw-Bf-rx_aV.js">
+    <link rel="modulepreload" crossorigin href="./assets/tree-actions-CG5g7aUQ.js">
+    <link rel="modulepreload" crossorigin href="./assets/ellipsis-Dfik_tuW.js">
+    <link rel="modulepreload" crossorigin href="./assets/external-link-Bp3BxyRA.js">
+    <link rel="modulepreload" crossorigin href="./assets/spinner-Ck-Hgfvj.js">
+    <link rel="modulepreload" crossorigin href="./assets/message-circle-BQB1AIAg.js">
+    <link rel="modulepreload" crossorigin href="./assets/hat-glasses-C8LSY3HT.js">
+    <link rel="modulepreload" crossorigin href="./assets/package-DPlscLzt.js">
+    <link rel="modulepreload" crossorigin href="./assets/datasource-DrODSIs0.js">
+    <link rel="modulepreload" crossorigin href="./assets/kbd-Cwh96ZBE.js">
+    <link rel="modulepreload" crossorigin href="./assets/alert-dmKwNsrp.js">
+    <link rel="modulepreload" crossorigin href="./assets/useInstallPackage-DsD08SLK.js">
+    <link rel="modulepreload" crossorigin href="./assets/state-B6AklCzD.js">
+    <link rel="modulepreload" crossorigin href="./assets/cell-link-6burT2XF.js">
+    <link rel="modulepreload" crossorigin href="./assets/MarimoErrorOutput-DqpoYOvw.js">
+    <link rel="modulepreload" crossorigin href="./assets/VisuallyHidden-CBMDmozt.js">
+    <link rel="modulepreload" crossorigin href="./assets/useDateFormatter-BiqAQ-zI.js">
+    <link rel="modulepreload" crossorigin href="./assets/en-US-yTIMUO13.js">
+    <link rel="modulepreload" crossorigin href="./assets/isValid-nQ3Iam8J.js">
+    <link rel="modulepreload" crossorigin href="./assets/dates-B58T85Jq.js">
+    <link rel="modulepreload" crossorigin href="./assets/defaultLocale-CNPGWpMu.js">
+    <link rel="modulepreload" crossorigin href="./assets/precisionRound-Bq_nmf5u.js">
+    <link rel="modulepreload" crossorigin href="./assets/defaultLocale-Dm4DaIgg.js">
+    <link rel="modulepreload" crossorigin href="./assets/vega-loader.browser-AQmjV9CX.js">
+    <link rel="modulepreload" crossorigin href="./assets/tooltip-BG35uS_N.js">
+    <link rel="modulepreload" crossorigin href="./assets/react-icons.esm-hr79-MCS.js">
+    <link rel="modulepreload" crossorigin href="./assets/emotion-is-prop-valid.esm-nLO-SoUf.js">
+    <link rel="modulepreload" crossorigin href="./assets/useIframeCapabilities-C7Di8f2y.js">
+    <link rel="modulepreload" crossorigin href="./assets/error-banner-Dw5YY9wq.js">
+    <link rel="modulepreload" crossorigin href="./assets/utils-49LGK4zG.js">
+    <link rel="modulepreload" crossorigin href="./assets/formats-C6s96nu2.js">
+    <link rel="modulepreload" crossorigin href="./assets/table-DmqOOjfe.js">
+    <link rel="modulepreload" crossorigin href="./assets/react-resizable-panels.browser.esm-BSRAHC4P.js">
+    <link rel="modulepreload" crossorigin href="./assets/JsonOutput-CzIGPEZQ.js">
+    <link rel="modulepreload" crossorigin href="./assets/chart-no-axes-column-ChZdjJhj.js">
+    <link rel="modulepreload" crossorigin href="./assets/square-function-DkZweMAs.js">
+    <link rel="modulepreload" crossorigin href="./assets/spec-DKsAmLTi.js">
+    <link rel="modulepreload" crossorigin href="./assets/semaphore-BjoL5P0h.js">
+    <link rel="modulepreload" crossorigin href="./assets/fileToBase64-NhpNrK5l.js">
+    <link rel="modulepreload" crossorigin href="./assets/useBoolean-BXC4CItZ.js">
+    <link rel="modulepreload" crossorigin href="./assets/code-xml-B7x62Eeh.js">
+    <link rel="modulepreload" crossorigin href="./assets/file-headphone-rFCxFRI8.js">
+    <link rel="modulepreload" crossorigin href="./assets/file-DF8n85RA.js">
+    <link rel="modulepreload" crossorigin href="./assets/image-ab13yGv4.js">
+    <link rel="modulepreload" crossorigin href="./assets/file-icons-DdGYuADJ.js">
+    <link rel="modulepreload" crossorigin href="./assets/globe-BQf75qV_.js">
+    <link rel="modulepreload" crossorigin href="./assets/markdown-export-0rLbaq8b.js">
+    <link rel="modulepreload" crossorigin href="./assets/data-grid-types-DgHVN_Zz.js">
+    <link rel="modulepreload" crossorigin href="./assets/glide-utils-UGsrRHYj.js">
+    <link rel="modulepreload" crossorigin href="./assets/column-preview-riSXbYe_.js">
+    <link rel="modulepreload" crossorigin href="./assets/square-B58Ib8Ir.js">
+    <link rel="modulepreload" crossorigin href="./assets/triangle-alert-MihykDYG.js">
+    <link rel="modulepreload" crossorigin href="./assets/prop-types-Djf4O40e.js">
+    <link rel="modulepreload" crossorigin href="./assets/es-CrFhA96G.js">
+    <link rel="modulepreload" crossorigin href="./assets/renderShortcut-X-CJUSM8.js">
+    <link rel="modulepreload" crossorigin href="./assets/bundle.esm-DzY74mzC.js">
+    <link rel="modulepreload" crossorigin href="./assets/icons-CjLa9BiH.js">
+    <link rel="modulepreload" crossorigin href="./assets/useDeepCompareMemoize-CLytDdMl.js">
+    <link rel="modulepreload" crossorigin href="./assets/pathUtils-Cryrlpma.js">
+    <link rel="modulepreload" crossorigin href="./assets/floating-outline-DaUHnl_e.js">
+    <link rel="stylesheet" crossorigin href="./assets/cells-D-c15Ks-.css">
+    <link rel="stylesheet" crossorigin href="./assets/markdown-renderer-B7zTpxjS.css">
+    <link rel="stylesheet" crossorigin href="./assets/JsonOutput-BQtz7-np.css">
+    <link rel="stylesheet" crossorigin href="./assets/index-C7yAojRA.css">
+  <marimo-wasm hidden=""></marimo-wasm>
+    <script>
+        if (window.location.protocol === 'file:') {
+            alert('Warning: This file must be served by an HTTP server to function correctly.');
+        }
+    </script>
+    
+    <style>
+        #save-button {
+            display: none !important;
+        }
+        #filename-input {
+            display: none !important;
+        }
+    </style>
+    
+<script data-marimo="true">
+    Object.defineProperty(window, "__MARIMO_EXPORT_CONTEXT__", {
+        value: Object.freeze({
+            trusted: true,
+            notebookCode: "import marimo\n\n__generated_with = \"0.24.2\"\napp = marimo.App(width=\"medium\")\n\n\n@app.cell\ndef _():\n    import marimo as mo\n    import pandas as pd\n    import numpy as np\n    import geopandas as gpd\n    import matplotlib.pyplot as plt\n    import matplotlib.patheffects as pe\n\n    return gpd, mo, np, pd, pe, plt\n\n\n@app.cell\ndef _(mo):\n    mo.md(\"\"\"\n    # NYC Residential Composting \u2014 Interactive Capture Rate Map\n\n    Drag the slider below to pick a month. The map updates to show that\n    month's residential composting **capture rate** by community\n    district \u2014 organics collected as a share of compostable material\n    estimated to have been generated (2023 NYC Waste Characterization\n    Study; see Assumption A3 in `nyc_composting_spatiotemporal.ipynb`).\n\n    Excludes yard waste (leaves, Christmas trees) per Assumption A2,\n    and starts January 2021 per Assumption A1.\n    \"\"\")\n    return\n\n\n@app.cell\ndef _(np, pd):\n    # Same load + clean pipeline as Steps 1-4 of nyc_composting_spatiotemporal.ipynb\n    DATASET_ID = \"ebb7-mvp5\"\n    url = f\"https://data.cityofnewyork.us/resource/{DATASET_ID}.csv?$limit=200000\"\n    df = pd.read_csv(url)\n\n    TIME_COL = \"month\"\n    BORO_COL = \"borough\"\n    DIST_COL = \"communitydistrict\"\n    REFUSE = \"refusetonscollected\"\n    PAPER = \"papertonscollected\"\n    MGP = \"mgptonscollected\"\n\n    # INCLUDE_YARD_WASTE = False per Assumption A2\n    ORG_COLS = [\"resorganicstons\", \"otherorganicstons\"]\n    RECYCLING = [REFUSE, PAPER, MGP]\n    ALL_STREAMS = RECYCLING + ORG_COLS\n    COMPOSTABLE_FRACTION = 0.358  # 2023 NYC Waste Characterization Study (Assumption A3)\n\n    import re\n\n    for c in ALL_STREAMS:\n        df[c] = pd.to_numeric(df[c], errors=\"coerce\")\n\n    def parse_month(s):\n        m = re.search(r\"(\\d{4})\\D+(\\d{1,2})\", str(s))\n        return pd.Timestamp(int(m.group(1)), int(m.group(2)), 1) if m else pd.NaT\n\n    df[\"date\"] = df[TIME_COL].map(parse_month)\n    df = df.dropna(subset=[\"date\"])\n    df = df[df[\"date\"] \u003E= \"2021-01-01\"].sort_values(\"date\")  # Assumption A1\n\n    df[\"organics\"] = df[ORG_COLS].sum(axis=1)\n    df[\"total\"] = df[ALL_STREAMS].sum(axis=1)\n    df[\"compost_rate\"] = np.where(df[\"total\"] \u003E 0, df[\"organics\"] / df[\"total\"] * 100, np.nan)\n\n    months = sorted(df[\"date\"].unique())\n    return BORO_COL, COMPOSTABLE_FRACTION, DIST_COL, df, months\n\n\n@app.cell\ndef _(pd):\n    POLICY_DATES = {\n        \"Mandatory (Oct 6 2024)\": pd.Timestamp(\"2024-10-06\"),\n        \"Enforcement (Apr 1 2025)\": pd.Timestamp(\"2025-04-01\"),\n    }\n    return (POLICY_DATES,)\n\n\n@app.cell\ndef _(gpd):\n    # NYC Community District boundaries (Assumption A5)\n    GEO_DATASET_ID = \"5crt-au7u\"\n    geo_url = f\"https://data.cityofnewyork.us/resource/{GEO_DATASET_ID}.geojson?$limit=2000\"\n    cds = gpd.read_file(geo_url)\n    GEO_JOIN_FIELD = \"boro_cd\"  # adjust if this doesn't match cds.columns.tolist()\n    return GEO_JOIN_FIELD, cds\n\n\n@app.cell\ndef _(GEO_JOIN_FIELD, cds):\n    BORO_ID = {\"Manhattan\": 1, \"Bronx\": 2, \"Brooklyn\": 3, \"Queens\": 4, \"Staten Island\": 5}\n    ID_TO_BORO = {v: k for k, v in BORO_ID.items()}\n    cds[\"_boro_id\"] = cds[GEO_JOIN_FIELD].astype(str).str[0].astype(int)\n    boro_shapes = cds.dissolve(by=\"_boro_id\")\n    return BORO_ID, ID_TO_BORO, boro_shapes\n\n\n@app.cell\ndef _(mo, months):\n    month_slider = mo.ui.slider(\n        start=0,\n        stop=len(months) - 1,\n        value=len(months) - 1,  # defaults to the most recent month available\n        step=1,\n        label=\"Month\",\n        full_width=True,\n    )\n    month_slider\n    return (month_slider,)\n\n\n@app.cell\ndef _(POLICY_DATES, mo, month_slider, months):\n    selected_month = months[month_slider.value]\n\n    mandate = POLICY_DATES[\"Mandatory (Oct 6 2024)\"]\n    enforcement = POLICY_DATES[\"Enforcement (Apr 1 2025)\"]\n    if selected_month \u003C mandate:\n        phase = \"Pre-mandate\"\n    elif selected_month \u003C enforcement:\n        phase = \"Post-mandate, pre-enforcement\"\n    else:\n        phase = \"Post-enforcement\"\n\n    mo.md(f\"### {selected_month.strftime('%B %Y')}\\n*{phase}*\")\n    return (selected_month,)\n\n\n@app.cell\ndef _(\n    BORO_COL,\n    BORO_ID,\n    COMPOSTABLE_FRACTION,\n    DIST_COL,\n    GEO_JOIN_FIELD,\n    ID_TO_BORO,\n    boro_shapes,\n    cds,\n    df,\n    pd,\n    pe,\n    plt,\n    selected_month,\n):\n    # Same composite-key fix as Steps 8-9: group by (borough, district)\n    # together, since district numbers repeat across boroughs.\n    sub = df[df[\"date\"] == selected_month]\n    latest = sub.groupby([BORO_COL, DIST_COL]).apply(\n        lambda g: pd.Series({\n            \"diversion_%\": g[\"organics\"].sum() / g[\"total\"].sum() * 100,\n            \"capture_%\":   g[\"organics\"].sum() / (COMPOSTABLE_FRACTION * g[\"total\"].sum()) * 100,\n        })\n    ).reset_index()\n\n    latest[\"boro_cd\"] = (\n        latest[BORO_COL].map(BORO_ID).astype(int) * 100 + latest[DIST_COL].astype(int)\n    ).astype(str).str.zfill(3)\n\n    merged = cds.merge(latest, left_on=GEO_JOIN_FIELD, right_on=\"boro_cd\", how=\"left\")\n\n    fig, ax = plt.subplots(figsize=(9, 9))\n    merged.plot(\n        column=\"capture_%\", cmap=\"Purples\", linewidth=0.5, edgecolor=\"black\",\n        legend=True, ax=ax, missing_kwds={\"color\": \"lightgrey\", \"label\": \"No data / excluded (e.g. JIAs)\"},\n    )\n    boro_shapes.boundary.plot(ax=ax, color=\"black\", linewidth=2.2)\n\n    for boro_id, geom in boro_shapes.geometry.items():\n        centroid = geom.centroid\n        ax.annotate(\n            ID_TO_BORO.get(boro_id, str(boro_id)), xy=(centroid.x, centroid.y),\n            ha=\"center\", va=\"center\", fontsize=11, fontweight=\"bold\", color=\"black\",\n            path_effects=[pe.withStroke(linewidth=3, foreground=\"white\")],\n        )\n\n    ax.set_title(f\"Residential composting capture rate \u2014 {selected_month.strftime('%Y-%m')}\")\n    ax.set_axis_off()\n    fig\n    return\n\n\nif __name__ == \"__main__\":\n    app.run()\n",
+        }),
+        writable: false,
+        configurable: false,
+    });
+</script>
+<marimo-code hidden="">import%20marimo%0A%0A__generated_with%20%3D%20%220.24.2%22%0Aapp%20%3D%20marimo.App(width%3D%22medium%22)%0A%0A%0A%40app.cell%0Adef%20_()%3A%0A%20%20%20%20import%20marimo%20as%20mo%0A%20%20%20%20import%20pandas%20as%20pd%0A%20%20%20%20import%20numpy%20as%20np%0A%20%20%20%20import%20geopandas%20as%20gpd%0A%20%20%20%20import%20matplotlib.pyplot%20as%20plt%0A%20%20%20%20import%20matplotlib.patheffects%20as%20pe%0A%0A%20%20%20%20return%20gpd%2C%20mo%2C%20np%2C%20pd%2C%20pe%2C%20plt%0A%0A%0A%40app.cell%0Adef%20_(mo)%3A%0A%20%20%20%20mo.md(%22%22%22%0A%20%20%20%20%23%20NYC%20Residential%20Composting%20%E2%80%94%20Interactive%20Capture%20Rate%20Map%0A%0A%20%20%20%20Drag%20the%20slider%20below%20to%20pick%20a%20month.%20The%20map%20updates%20to%20show%20that%0A%20%20%20%20month's%20residential%20composting%20**capture%20rate**%20by%20community%0A%20%20%20%20district%20%E2%80%94%20organics%20collected%20as%20a%20share%20of%20compostable%20material%0A%20%20%20%20estimated%20to%20have%20been%20generated%20(2023%20NYC%20Waste%20Characterization%0A%20%20%20%20Study%3B%20see%20Assumption%20A3%20in%20%60nyc_composting_spatiotemporal.ipynb%60).%0A%0A%20%20%20%20Excludes%20yard%20waste%20(leaves%2C%20Christmas%20trees)%20per%20Assumption%20A2%2C%0A%20%20%20%20and%20starts%20January%202021%20per%20Assumption%20A1.%0A%20%20%20%20%22%22%22)%0A%20%20%20%20return%0A%0A%0A%40app.cell%0Adef%20_(np%2C%20pd)%3A%0A%20%20%20%20%23%20Same%20load%20%2B%20clean%20pipeline%20as%20Steps%201-4%20of%20nyc_composting_spatiotemporal.ipynb%0A%20%20%20%20DATASET_ID%20%3D%20%22ebb7-mvp5%22%0A%20%20%20%20url%20%3D%20f%22https%3A%2F%2Fdata.cityofnewyork.us%2Fresource%2F%7BDATASET_ID%7D.csv%3F%24limit%3D200000%22%0A%20%20%20%20df%20%3D%20pd.read_csv(url)%0A%0A%20%20%20%20TIME_COL%20%3D%20%22month%22%0A%20%20%20%20BORO_COL%20%3D%20%22borough%22%0A%20%20%20%20DIST_COL%20%3D%20%22communitydistrict%22%0A%20%20%20%20REFUSE%20%3D%20%22refusetonscollected%22%0A%20%20%20%20PAPER%20%3D%20%22papertonscollected%22%0A%20%20%20%20MGP%20%3D%20%22mgptonscollected%22%0A%0A%20%20%20%20%23%20INCLUDE_YARD_WASTE%20%3D%20False%20per%20Assumption%20A2%0A%20%20%20%20ORG_COLS%20%3D%20%5B%22resorganicstons%22%2C%20%22otherorganicstons%22%5D%0A%20%20%20%20RECYCLING%20%3D%20%5BREFUSE%2C%20PAPER%2C%20MGP%5D%0A%20%20%20%20ALL_STREAMS%20%3D%20RECYCLING%20%2B%20ORG_COLS%0A%20%20%20%20COMPOSTABLE_FRACTION%20%3D%200.358%20%20%23%202023%20NYC%20Waste%20Characterization%20Study%20(Assumption%20A3)%0A%0A%20%20%20%20import%20re%0A%0A%20%20%20%20for%20c%20in%20ALL_STREAMS%3A%0A%20%20%20%20%20%20%20%20df%5Bc%5D%20%3D%20pd.to_numeric(df%5Bc%5D%2C%20errors%3D%22coerce%22)%0A%0A%20%20%20%20def%20parse_month(s)%3A%0A%20%20%20%20%20%20%20%20m%20%3D%20re.search(r%22(%5Cd%7B4%7D)%5CD%2B(%5Cd%7B1%2C2%7D)%22%2C%20str(s))%0A%20%20%20%20%20%20%20%20return%20pd.Timestamp(int(m.group(1))%2C%20int(m.group(2))%2C%201)%20if%20m%20else%20pd.NaT%0A%0A%20%20%20%20df%5B%22date%22%5D%20%3D%20df%5BTIME_COL%5D.map(parse_month)%0A%20%20%20%20df%20%3D%20df.dropna(subset%3D%5B%22date%22%5D)%0A%20%20%20%20df%20%3D%20df%5Bdf%5B%22date%22%5D%20%3E%3D%20%222021-01-01%22%5D.sort_values(%22date%22)%20%20%23%20Assumption%20A1%0A%0A%20%20%20%20df%5B%22organics%22%5D%20%3D%20df%5BORG_COLS%5D.sum(axis%3D1)%0A%20%20%20%20df%5B%22total%22%5D%20%3D%20df%5BALL_STREAMS%5D.sum(axis%3D1)%0A%20%20%20%20df%5B%22compost_rate%22%5D%20%3D%20np.where(df%5B%22total%22%5D%20%3E%200%2C%20df%5B%22organics%22%5D%20%2F%20df%5B%22total%22%5D%20*%20100%2C%20np.nan)%0A%0A%20%20%20%20months%20%3D%20sorted(df%5B%22date%22%5D.unique())%0A%20%20%20%20return%20BORO_COL%2C%20COMPOSTABLE_FRACTION%2C%20DIST_COL%2C%20df%2C%20months%0A%0A%0A%40app.cell%0Adef%20_(pd)%3A%0A%20%20%20%20POLICY_DATES%20%3D%20%7B%0A%20%20%20%20%20%20%20%20%22Mandatory%20(Oct%206%202024)%22%3A%20pd.Timestamp(%222024-10-06%22)%2C%0A%20%20%20%20%20%20%20%20%22Enforcement%20(Apr%201%202025)%22%3A%20pd.Timestamp(%222025-04-01%22)%2C%0A%20%20%20%20%7D%0A%20%20%20%20return%20(POLICY_DATES%2C)%0A%0A%0A%40app.cell%0Adef%20_(gpd)%3A%0A%20%20%20%20%23%20NYC%20Community%20District%20boundaries%20(Assumption%20A5)%0A%20%20%20%20GEO_DATASET_ID%20%3D%20%225crt-au7u%22%0A%20%20%20%20geo_url%20%3D%20f%22https%3A%2F%2Fdata.cityofnewyork.us%2Fresource%2F%7BGEO_DATASET_ID%7D.geojson%3F%24limit%3D2000%22%0A%20%20%20%20cds%20%3D%20gpd.read_file(geo_url)%0A%20%20%20%20GEO_JOIN_FIELD%20%3D%20%22boro_cd%22%20%20%23%20adjust%20if%20this%20doesn't%20match%20cds.columns.tolist()%0A%20%20%20%20return%20GEO_JOIN_FIELD%2C%20cds%0A%0A%0A%40app.cell%0Adef%20_(GEO_JOIN_FIELD%2C%20cds)%3A%0A%20%20%20%20BORO_ID%20%3D%20%7B%22Manhattan%22%3A%201%2C%20%22Bronx%22%3A%202%2C%20%22Brooklyn%22%3A%203%2C%20%22Queens%22%3A%204%2C%20%22Staten%20Island%22%3A%205%7D%0A%20%20%20%20ID_TO_BORO%20%3D%20%7Bv%3A%20k%20for%20k%2C%20v%20in%20BORO_ID.items()%7D%0A%20%20%20%20cds%5B%22_boro_id%22%5D%20%3D%20cds%5BGEO_JOIN_FIELD%5D.astype(str).str%5B0%5D.astype(int)%0A%20%20%20%20boro_shapes%20%3D%20cds.dissolve(by%3D%22_boro_id%22)%0A%20%20%20%20return%20BORO_ID%2C%20ID_TO_BORO%2C%20boro_shapes%0A%0A%0A%40app.cell%0Adef%20_(mo%2C%20months)%3A%0A%20%20%20%20month_slider%20%3D%20mo.ui.slider(%0A%20%20%20%20%20%20%20%20start%3D0%2C%0A%20%20%20%20%20%20%20%20stop%3Dlen(months)%20-%201%2C%0A%20%20%20%20%20%20%20%20value%3Dlen(months)%20-%201%2C%20%20%23%20defaults%20to%20the%20most%20recent%20month%20available%0A%20%20%20%20%20%20%20%20step%3D1%2C%0A%20%20%20%20%20%20%20%20label%3D%22Month%22%2C%0A%20%20%20%20%20%20%20%20full_width%3DTrue%2C%0A%20%20%20%20)%0A%20%20%20%20month_slider%0A%20%20%20%20return%20(month_slider%2C)%0A%0A%0A%40app.cell%0Adef%20_(POLICY_DATES%2C%20mo%2C%20month_slider%2C%20months)%3A%0A%20%20%20%20selected_month%20%3D%20months%5Bmonth_slider.value%5D%0A%0A%20%20%20%20mandate%20%3D%20POLICY_DATES%5B%22Mandatory%20(Oct%206%202024)%22%5D%0A%20%20%20%20enforcement%20%3D%20POLICY_DATES%5B%22Enforcement%20(Apr%201%202025)%22%5D%0A%20%20%20%20if%20selected_month%20%3C%20mandate%3A%0A%20%20%20%20%20%20%20%20phase%20%3D%20%22Pre-mandate%22%0A%20%20%20%20elif%20selected_month%20%3C%20enforcement%3A%0A%20%20%20%20%20%20%20%20phase%20%3D%20%22Post-mandate%2C%20pre-enforcement%22%0A%20%20%20%20else%3A%0A%20%20%20%20%20%20%20%20phase%20%3D%20%22Post-enforcement%22%0A%0A%20%20%20%20mo.md(f%22%23%23%23%20%7Bselected_month.strftime('%25B%20%25Y')%7D%5Cn*%7Bphase%7D*%22)%0A%20%20%20%20return%20(selected_month%2C)%0A%0A%0A%40app.cell%0Adef%20_(%0A%20%20%20%20BORO_COL%2C%0A%20%20%20%20BORO_ID%2C%0A%20%20%20%20COMPOSTABLE_FRACTION%2C%0A%20%20%20%20DIST_COL%2C%0A%20%20%20%20GEO_JOIN_FIELD%2C%0A%20%20%20%20ID_TO_BORO%2C%0A%20%20%20%20boro_shapes%2C%0A%20%20%20%20cds%2C%0A%20%20%20%20df%2C%0A%20%20%20%20pd%2C%0A%20%20%20%20pe%2C%0A%20%20%20%20plt%2C%0A%20%20%20%20selected_month%2C%0A)%3A%0A%20%20%20%20%23%20Same%20composite-key%20fix%20as%20Steps%208-9%3A%20group%20by%20(borough%2C%20district)%0A%20%20%20%20%23%20together%2C%20since%20district%20numbers%20repeat%20across%20boroughs.%0A%20%20%20%20sub%20%3D%20df%5Bdf%5B%22date%22%5D%20%3D%3D%20selected_month%5D%0A%20%20%20%20latest%20%3D%20sub.groupby(%5BBORO_COL%2C%20DIST_COL%5D).apply(%0A%20%20%20%20%20%20%20%20lambda%20g%3A%20pd.Series(%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20%22diversion_%25%22%3A%20g%5B%22organics%22%5D.sum()%20%2F%20g%5B%22total%22%5D.sum()%20*%20100%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20%22capture_%25%22%3A%20%20%20g%5B%22organics%22%5D.sum()%20%2F%20(COMPOSTABLE_FRACTION%20*%20g%5B%22total%22%5D.sum())%20*%20100%2C%0A%20%20%20%20%20%20%20%20%7D)%0A%20%20%20%20).reset_index()%0A%0A%20%20%20%20latest%5B%22boro_cd%22%5D%20%3D%20(%0A%20%20%20%20%20%20%20%20latest%5BBORO_COL%5D.map(BORO_ID).astype(int)%20*%20100%20%2B%20latest%5BDIST_COL%5D.astype(int)%0A%20%20%20%20).astype(str).str.zfill(3)%0A%0A%20%20%20%20merged%20%3D%20cds.merge(latest%2C%20left_on%3DGEO_JOIN_FIELD%2C%20right_on%3D%22boro_cd%22%2C%20how%3D%22left%22)%0A%0A%20%20%20%20fig%2C%20ax%20%3D%20plt.subplots(figsize%3D(9%2C%209))%0A%20%20%20%20merged.plot(%0A%20%20%20%20%20%20%20%20column%3D%22capture_%25%22%2C%20cmap%3D%22Purples%22%2C%20linewidth%3D0.5%2C%20edgecolor%3D%22black%22%2C%0A%20%20%20%20%20%20%20%20legend%3DTrue%2C%20ax%3Dax%2C%20missing_kwds%3D%7B%22color%22%3A%20%22lightgrey%22%2C%20%22label%22%3A%20%22No%20data%20%2F%20excluded%20(e.g.%20JIAs)%22%7D%2C%0A%20%20%20%20)%0A%20%20%20%20boro_shapes.boundary.plot(ax%3Dax%2C%20color%3D%22black%22%2C%20linewidth%3D2.2)%0A%0A%20%20%20%20for%20boro_id%2C%20geom%20in%20boro_shapes.geometry.items()%3A%0A%20%20%20%20%20%20%20%20centroid%20%3D%20geom.centroid%0A%20%20%20%20%20%20%20%20ax.annotate(%0A%20%20%20%20%20%20%20%20%20%20%20%20ID_TO_BORO.get(boro_id%2C%20str(boro_id))%2C%20xy%3D(centroid.x%2C%20centroid.y)%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20ha%3D%22center%22%2C%20va%3D%22center%22%2C%20fontsize%3D11%2C%20fontweight%3D%22bold%22%2C%20color%3D%22black%22%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20path_effects%3D%5Bpe.withStroke(linewidth%3D3%2C%20foreground%3D%22white%22)%5D%2C%0A%20%20%20%20%20%20%20%20)%0A%0A%20%20%20%20ax.set_title(f%22Residential%20composting%20capture%20rate%20%E2%80%94%20%7Bselected_month.strftime('%25Y-%25m')%7D%22)%0A%20%20%20%20ax.set_axis_off()%0A%20%20%20%20fig%0A%20%20%20%20return%0A%0A%0Aif%20__name__%20%3D%3D%20%22__main__%22%3A%0A%20%20%20%20app.run()%0A</marimo-code></head>
+  <body>
+    <div id="root"></div>
+    <script data-marimo="true">
+      Object.defineProperty(window, "__MARIMO_MOUNT_CONFIG__", {
+        value: Object.freeze({
+            "filename": "notebook.py",
+            "cwd": "",
+            "lspWorkspace": null,
+            "mode": "read",
+            "version": "0.24.2",
+            "serverToken": "unused",
+            "config": {"ai": {"allow_provider_config": true, "custom_providers": {}, "enabled": true, "models": {"custom_models": [], "displayed_models": []}}, "completion": {"activate_on_typing": true, "auto_close_pairs": true, "copilot": false, "signature_hint_on_typing": false}, "diagnostics": {"sql_linter": true}, "display": {"cell_output": "below", "code_editor_font_size": 14, "code_lens": true, "dataframes": "rich", "default_table_max_columns": 50, "default_table_page_size": 10, "default_width": "medium", "reference_highlighting": true, "theme": "light"}, "formatting": {"line_length": 79}, "keymap": {"overrides": {}, "preset": "default"}, "language_servers": {"pylsp": {"enable_flake8": false, "enable_mypy": true, "enable_pydocstyle": false, "enable_pyflakes": false, "enable_pylint": false, "enable_ruff": true, "enabled": false}}, "mcp": {"mcpServers": {}, "presets": []}, "package_management": {"manager": "pip"}, "runtime": {"auto_instantiate": false, "auto_reload": "off", "default_csv_encoding": "utf-8", "default_sql_output": "auto", "on_cell_change": "autorun", "output_max_bytes": 8000000, "reactive_tests": true, "show_tracebacks": false, "std_stream_max_bytes": 1000000, "watcher_on_save": "lazy"}, "save": {"autosave": "off", "autosave_delay": 1000, "format_on_save": false}, "server": {"browser": "default", "follow_symlink": false}, "snippets": {"custom_paths": [], "include_default_snippets": true}},
+            "configOverrides": {},
+            "appConfig": {"sql_output": "auto", "width": "medium"},
+            "layout": null,
+            "view": {"showAppCode": false},
+            "notebook": null,
+            "session": null,
+            "runtimeConfig": null
+        }),
+        writable: false,
+        configurable: false,
+      });
+    </script>
+  </body>
+</html>
