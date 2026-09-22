@@ -125,7 +125,7 @@ def _(mo, months, year_dropdown):
         value=list(month_options.keys())[-1],  # defaults to the latest month in the selected year
         label="Month",
     )
-    mo.hstack([year_dropdown, month_dropdown])
+    mo.hstack([year_dropdown, month_dropdown], justify="start", align="center", gap=1)
     return month_dropdown, month_options
 
 
