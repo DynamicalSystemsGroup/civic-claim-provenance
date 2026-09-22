@@ -21,11 +21,12 @@ def _(mo):
         """
         # NYC Residential Composting — Interactive Capture Rate Map
 
-        Drag the slider below to pick a month. The map updates to show that
-        month's residential composting **capture rate** by community
-        district — organics collected as a share of compostable material
-        estimated to have been generated (2023 NYC Waste Characterization
-        Study; see Assumption A3 in `nyc_composting_spatiotemporal.ipynb`).
+        Use the dropdowns below to pick a year and month. The map updates to
+        show that month's residential composting **capture rate** by
+        community district — organics collected as a share of compostable
+        material estimated to have been generated (2023 NYC Waste
+        Characterization Study; see Assumption A3 in
+        `nyc_composting_spatiotemporal.ipynb`).
 
         Excludes yard waste (leaves, Christmas trees) per Assumption A2,
         and starts January 2021 per Assumption A1.
@@ -105,21 +106,32 @@ def _(GEO_JOIN_FIELD, cds):
 
 @app.cell
 def _(mo, months):
-    month_slider = mo.ui.slider(
-        start=0,
-        stop=len(months) - 1,
-        value=len(months) - 1,  # defaults to the most recent month available
-        step=1,
-        label="Month",
-        full_width=True,
+    years = sorted({m.year for m in months})
+    year_dropdown = mo.ui.dropdown(
+        options=[str(y) for y in years],
+        value=str(years[-1]),  # defaults to the most recent year available
+        label="Year",
     )
-    month_slider
-    return (month_slider,)
+    return year_dropdown, years
 
 
 @app.cell
-def _(POLICY_DATES, mo, month_slider, months):
-    selected_month = months[month_slider.value]
+def _(mo, months, year_dropdown):
+    selected_year = int(year_dropdown.value)
+    months_in_year = [m for m in months if m.year == selected_year]
+    month_options = {m.strftime("%B"): m for m in months_in_year}
+    month_dropdown = mo.ui.dropdown(
+        options=list(month_options.keys()),
+        value=list(month_options.keys())[-1],  # defaults to the latest month in the selected year
+        label="Month",
+    )
+    mo.hstack([year_dropdown, month_dropdown])
+    return month_dropdown, month_options
+
+
+@app.cell
+def _(POLICY_DATES, mo, month_dropdown, month_options):
+    selected_month = month_options[month_dropdown.value]
 
     mandate = POLICY_DATES["Mandatory (Oct 6 2024)"]
     enforcement = POLICY_DATES["Enforcement (Apr 1 2025)"]
