@@ -10,16 +10,13 @@ def _():
     import pandas as pd
     import numpy as np
     import geopandas as gpd
-    import plotly.express as px
-    import plotly.graph_objects as go
-    return gpd, go, mo, np, pd, px
+    import matplotlib.pyplot as plt
+    import matplotlib.patheffects as pe
+    return gpd, mo, np, pd, pe, plt
 
 
 @app.cell
 def _(mo):
-    # Capped to the same 650px column as the slider and map below, so the
-    # text doesn't run wider than the content under it — no more mismatch
-    # where the page reads full-width up top but narrows partway down.
     mo.md(
         """
         # NYC Residential Composting: Interactive Capture Rate Map
@@ -30,12 +27,11 @@ def _(mo):
         organics collected as a share of compostable material estimated
         to have been generated (2023 NYC Waste Characterization Study;
         see Assumption A3 in [`nyc_composting_spatiotemporal.ipynb`](https://github.com/DynamicalSystemsGroup/civic-claim-provenance/blob/main/analysis/nyc_composting_spatiotemporal.ipynb)).
-        Hover over a district on the map for its exact capture rate.
 
         Excludes yard waste (leaves, Christmas trees) per Assumption A2,
         and starts January 2021 per Assumption A1.
         """
-    ).style(max_width="650px")
+    )
     return
 
 
@@ -163,9 +159,10 @@ def _(
     boro_shapes,
     cds,
     df,
-    go,
+    mo,
     pd,
-    px,
+    pe,
+    plt,
     selected_month,
 ):
     # Same composite-key fix as Steps 8-9: group by (borough, district)
@@ -183,68 +180,36 @@ def _(
     ).astype(str).str.zfill(3)
 
     merged = cds.merge(latest, left_on=GEO_JOIN_FIELD, right_on="boro_cd", how="left")
-    merged["district_label"] = merged.apply(
-        lambda r: f"{r[BORO_COL]} CD {int(r[DIST_COL])}"
-        if pd.notna(r[DIST_COL])
-        else "No data / excluded (e.g. JIA)",
-        axis=1,
+
+    fig, ax = plt.subplots(figsize=(9, 9))
+    merged.plot(
+        column="capture_%", cmap="Purples", linewidth=0.5, edgecolor="black",
+        legend=True, ax=ax, missing_kwds={"color": "lightgrey", "label": "No data / excluded (e.g. JIAs)"},
     )
+    boro_shapes.boundary.plot(ax=ax, color="black", linewidth=2.2)
 
-    # Switched from a static matplotlib PNG to an interactive Plotly
-    # choropleth so each district can carry its own hover tooltip (the
-    # capture rate %) — a flat image has no way to do that per-shape.
-    import json
+    for boro_id, geom in boro_shapes.geometry.items():
+        centroid = geom.centroid
+        ax.annotate(
+            ID_TO_BORO.get(boro_id, str(boro_id)), xy=(centroid.x, centroid.y),
+            ha="center", va="center", fontsize=11, fontweight="bold", color="black",
+            path_effects=[pe.withStroke(linewidth=3, foreground="white")],
+        )
 
-    geojson = json.loads(merged.to_json())
+    ax.set_title(f"Residential composting capture rate — {selected_month.strftime('%Y-%m')}")
+    ax.set_axis_off()
 
-    fig = px.choropleth(
-        merged,
-        geojson=geojson,
-        locations=GEO_JOIN_FIELD,
-        featureidkey=f"properties.{GEO_JOIN_FIELD}",
-        color="capture_%",
-        color_continuous_scale="Purples",
-        hover_name="district_label",
-        hover_data={"capture_%": ":.1f", GEO_JOIN_FIELD: False},
-    )
-    fig.update_traces(marker_line_width=0.5, marker_line_color="black")
+    # Crop to the actual drawn content (map + colorbar + labels) instead of
+    # the full square figure canvas — removes the dead whitespace matplotlib
+    # was leaving on the right of the colorbar. Left-aligned (not centered),
+    # matching the slider block above it, so both sit on the same left edge.
+    import io
 
-    # Bold borough outlines, drawn as a second, fill-less choropleth layer.
-    boro_flat = boro_shapes.reset_index()
-    boro_geojson = json.loads(boro_flat.to_json())
-    fig.add_trace(go.Choropleth(
-        geojson=boro_geojson,
-        locations=boro_flat["_boro_id"],
-        featureidkey="properties._boro_id",
-        z=[0] * len(boro_flat),
-        colorscale=[[0, "rgba(0,0,0,0)"], [1, "rgba(0,0,0,0)"]],
-        showscale=False,
-        marker_line_width=3,
-        marker_line_color="black",
-        hoverinfo="skip",
-    ))
-
-    # Borough name labels at each borough's centroid.
-    centroids = boro_shapes.geometry.centroid
-    fig.add_trace(go.Scattergeo(
-        lon=centroids.x,
-        lat=centroids.y,
-        text=[ID_TO_BORO.get(i, str(i)) for i in boro_shapes.index],
-        mode="text",
-        textfont=dict(size=14, color="black"),
-        hoverinfo="skip",
-        showlegend=False,
-    ))
-
-    fig.update_geos(fitbounds="locations", visible=False)
-    fig.update_layout(
-        title=f"Residential composting capture rate — {selected_month.strftime('%Y-%m')}",
-        width=650,
-        height=650,
-        margin=dict(l=0, r=0, t=40, b=0),
-        coloraxis_colorbar_title="Capture %",
-    )
-    fig
+    buf = io.BytesIO()
+    fig.savefig(buf, format="png", dpi=150, bbox_inches="tight", pad_inches=0.15)
+    plt.close(fig)
+    buf.seek(0)
+    mo.image(buf, width=650)
     return
 
 
