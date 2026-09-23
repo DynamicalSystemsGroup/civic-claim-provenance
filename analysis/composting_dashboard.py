@@ -17,8 +17,9 @@ def _():
 
 @app.cell
 def _(mo):
-    # Capped to the same 650px column as the slider and map below, so the
-    # text doesn't run wider than the content under it.
+    # Capped to the same 1000px column as the slider and map below (not
+    # left uncapped, and not left at the old 650px, which stranded a big
+    # gap of empty page to the right of everything).
     mo.md(
         """
         # NYC Residential Composting: Interactive Capture Rate Map
@@ -33,7 +34,7 @@ def _(mo):
         Excludes yard waste (leaves, Christmas trees) per Assumption A2,
         and starts January 2021 per Assumption A1.
         """
-    ).style(max_width="650px")
+    ).style(max_width="1000px")
     return
 
 
@@ -114,8 +115,9 @@ def _(mo, months):
     # suppressed separately via CSS injected into the exported page. The
     # live "Month Year" label is drawn directly above it in the next cell
     # instead, so the meaning is always visible next to the control.
-    # full_width=False keeps its footprint close to the map's, not the
-    # page's, so it doesn't sprawl past the choropleth below it.
+    # full_width=False keeps its footprint close to the map's below it
+    # (the slider itself stays compact; only the text/map column was
+    # widened), rather than sprawling across the whole page.
     month_slider = mo.ui.slider(
         start=0,
         stop=len(months) - 1,
@@ -184,7 +186,7 @@ def _(
 
     merged = cds.merge(latest, left_on=GEO_JOIN_FIELD, right_on="boro_cd", how="left")
 
-    fig, ax = plt.subplots(figsize=(9, 9))
+    fig, ax = plt.subplots(figsize=(13, 13))
     merged.plot(
         column="capture_%", cmap="Purples", linewidth=0.5, edgecolor="black",
         legend=True, ax=ax, missing_kwds={"color": "lightgrey", "label": "No data / excluded (e.g. JIAs)"},
@@ -206,13 +208,16 @@ def _(
     # the full square figure canvas — removes the dead whitespace matplotlib
     # was leaving on the right of the colorbar. Left-aligned (not centered),
     # matching the slider block above it, so both sit on the same left edge.
+    # Rendered at 1000px (up from 650px) to match the intro text's column
+    # width and use more of the page instead of leaving a large empty
+    # margin to the right of everything.
     import io
 
     buf = io.BytesIO()
     fig.savefig(buf, format="png", dpi=150, bbox_inches="tight", pad_inches=0.15)
     plt.close(fig)
     buf.seek(0)
-    mo.image(buf, width=650)
+    mo.image(buf, width=1000)
     return
 
 
