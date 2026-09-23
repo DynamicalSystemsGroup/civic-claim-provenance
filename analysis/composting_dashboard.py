@@ -21,11 +21,12 @@ def _(mo):
         """
         # NYC Residential Composting — Interactive Capture Rate Map
 
-        Use the dropdowns below to pick a year and month. The map updates to
-        show that month's residential composting **capture rate** by
-        community district — organics collected as a share of compostable
-        material estimated to have been generated (2023 NYC Waste
-        Characterization Study; see Assumption A3 in
+        Drag the slider below to pick a month — left is further in the past,
+        right is more recent. The selected month is shown above the slider,
+        and the map updates to show that month's residential composting
+        **capture rate** by community district — organics collected as a
+        share of compostable material estimated to have been generated
+        (2023 NYC Waste Characterization Study; see Assumption A3 in
         `nyc_composting_spatiotemporal.ipynb`).
 
         Excludes yard waste (leaves, Christmas trees) per Assumption A2,
@@ -106,32 +107,27 @@ def _(GEO_JOIN_FIELD, cds):
 
 @app.cell
 def _(mo, months):
-    years = sorted({m.year for m in months})
-    year_dropdown = mo.ui.dropdown(
-        options=[str(y) for y in years],
-        value=str(years[-1]),  # defaults to the most recent year available
-        label="Year",
+    # Compact slider, not the full page width: show_value=False hides the
+    # raw index (nobody wants to read "53 of 67"); the live "Month Year"
+    # label is drawn directly above it in the next cell instead, so the
+    # meaning is always visible next to the control rather than buried in
+    # a hover state that doesn't work well mid-drag or on touch devices.
+    # full_width=False keeps its footprint close to the map's, not the
+    # page's, so it doesn't sprawl past the choropleth below it.
+    month_slider = mo.ui.slider(
+        start=0,
+        stop=len(months) - 1,
+        value=len(months) - 1,  # defaults to the most recent month available
+        step=1,
+        show_value=False,
+        full_width=False,
     )
-    return year_dropdown, years
+    return (month_slider,)
 
 
 @app.cell
-def _(mo, months, year_dropdown):
-    selected_year = int(year_dropdown.value)
-    months_in_year = [m for m in months if m.year == selected_year]
-    month_options = {m.strftime("%B"): m for m in months_in_year}
-    month_dropdown = mo.ui.dropdown(
-        options=list(month_options.keys()),
-        value=list(month_options.keys())[-1],  # defaults to the latest month in the selected year
-        label="Month",
-    )
-    mo.hstack([year_dropdown, month_dropdown], justify="start", align="center", gap=1)
-    return month_dropdown, month_options
-
-
-@app.cell
-def _(POLICY_DATES, mo, month_dropdown, month_options):
-    selected_month = month_options[month_dropdown.value]
+def _(POLICY_DATES, mo, month_slider, months):
+    selected_month = months[month_slider.value]
 
     mandate = POLICY_DATES["Mandatory (Oct 6 2024)"]
     enforcement = POLICY_DATES["Enforcement (Apr 1 2025)"]
@@ -142,7 +138,14 @@ def _(POLICY_DATES, mo, month_dropdown, month_options):
     else:
         phase = "Post-enforcement"
 
-    mo.md(f"### {selected_month.strftime('%B %Y')}\n*{phase}*")
+    mo.vstack(
+        [
+            mo.md(f"**{selected_month.strftime('%B %Y')}** · *{phase}*"),
+            month_slider,
+        ],
+        align="start",
+        gap=0.25,
+    )
     return (selected_month,)
 
 
