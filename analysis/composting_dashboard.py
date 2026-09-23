@@ -19,15 +19,14 @@ def _():
 def _(mo):
     mo.md(
         """
-        # NYC Residential Composting — Interactive Capture Rate Map
+        # NYC Residential Composting: Interactive Capture Rate Map
 
-        Drag the slider below to pick a month — left is further in the past,
-        right is more recent. The selected month is shown above the slider,
-        and the map updates to show that month's residential composting
-        **capture rate** by community district — organics collected as a
-        share of compostable material estimated to have been generated
-        (2023 NYC Waste Characterization Study; see Assumption A3 in
-        `nyc_composting_spatiotemporal.ipynb`).
+        Drag the slider below to pick a month. The selected month is shown
+        above the slider, and the map updates to show that month's
+        residential composting **capture rate** by community district —
+        organics collected as a share of compostable material estimated
+        to have been generated (2023 NYC Waste Characterization Study;
+        see Assumption A3 in [`nyc_composting_spatiotemporal.ipynb`](https://github.com/DynamicalSystemsGroup/civic-claim-provenance/blob/main/analysis/nyc_composting_spatiotemporal.ipynb)).
 
         Excludes yard waste (leaves, Christmas trees) per Assumption A2,
         and starts January 2021 per Assumption A1.
@@ -138,13 +137,15 @@ def _(POLICY_DATES, mo, month_slider, months):
     else:
         phase = "Post-enforcement"
 
-    mo.vstack(
-        [
-            mo.md(f"**{selected_month.strftime('%B %Y')}** · *{phase}*"),
-            month_slider,
-        ],
-        align="start",
-        gap=0.25,
+    mo.center(
+        mo.vstack(
+            [
+                mo.md(f"**{selected_month.strftime('%B %Y')}** · *{phase}*"),
+                month_slider,
+            ],
+            align="center",
+            gap=0.25,
+        )
     )
     return (selected_month,)
 
