@@ -17,6 +17,8 @@ def _():
 
 @app.cell
 def _(mo):
+    # Capped to the same 650px column as the slider and map below, so the
+    # text doesn't run wider than the content under it.
     mo.md(
         """
         # NYC Residential Composting: Interactive Capture Rate Map
@@ -31,7 +33,7 @@ def _(mo):
         Excludes yard waste (leaves, Christmas trees) per Assumption A2,
         and starts January 2021 per Assumption A1.
         """
-    )
+    ).style(max_width="650px")
     return
 
 
@@ -107,10 +109,11 @@ def _(GEO_JOIN_FIELD, cds):
 @app.cell
 def _(mo, months):
     # Compact slider, not the full page width: show_value=False hides the
-    # raw index (nobody wants to read "53 of 67"); the live "Month Year"
-    # label is drawn directly above it in the next cell instead, so the
-    # meaning is always visible next to the control rather than buried in
-    # a hover state that doesn't work well mid-drag or on touch devices.
+    # persistent raw-index label; the built-in hover/drag tooltip (which
+    # also shows the raw index and isn't controlled by show_value) is
+    # suppressed separately via CSS injected into the exported page. The
+    # live "Month Year" label is drawn directly above it in the next cell
+    # instead, so the meaning is always visible next to the control.
     # full_width=False keeps its footprint close to the map's, not the
     # page's, so it doesn't sprawl past the choropleth below it.
     month_slider = mo.ui.slider(
