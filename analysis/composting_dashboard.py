@@ -137,15 +137,13 @@ def _(POLICY_DATES, mo, month_slider, months):
     else:
         phase = "Post-enforcement"
 
-    mo.center(
-        mo.vstack(
-            [
-                mo.md(f"**{selected_month.strftime('%B %Y')}** · *{phase}*"),
-                month_slider,
-            ],
-            align="center",
-            gap=0.25,
-        )
+    mo.vstack(
+        [
+            mo.md(f"**{selected_month.strftime('%B %Y')}** · *{phase}*"),
+            month_slider,
+        ],
+        align="start",
+        gap=0.25,
     )
     return (selected_month,)
 
@@ -202,17 +200,16 @@ def _(
     ax.set_axis_off()
 
     # Crop to the actual drawn content (map + colorbar + labels) instead of
-    # the full square figure canvas, then center that trimmed image on the
-    # page. This removes the dead whitespace matplotlib was leaving on the
-    # right of the colorbar, and puts the boroughs themselves (not the
-    # canvas) on the page's center line, directly under the slider above.
+    # the full square figure canvas — removes the dead whitespace matplotlib
+    # was leaving on the right of the colorbar. Left-aligned (not centered),
+    # matching the slider block above it, so both sit on the same left edge.
     import io
 
     buf = io.BytesIO()
     fig.savefig(buf, format="png", dpi=150, bbox_inches="tight", pad_inches=0.15)
     plt.close(fig)
     buf.seek(0)
-    mo.center(mo.image(buf, width=650))
+    mo.image(buf, width=650)
     return
 
 
